@@ -1,6 +1,8 @@
-# TeXFormulaLayout
+# TeX Formula Layout
 
-[Enter useful description for TeXFormulaLayout]
+> A re-implementation of TeX's formula layout written in F#.
+
+xref: [TeX-host/formulae: "A Functional Description of TeX's Formula Layout"](https://github.com/TeX-host/formulae)
 
 ---
 
@@ -81,19 +83,6 @@ $ ./build.sh  <optional buildtarget>// on unix
 
 
 ### Releasing
-
-- [Start a git repo with a remote](https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/)
-
-```sh
-git add .
-git commit -m "Scaffold"
-git remote add origin https://github.com/user/MyCoolNewApp.git
-git push -u origin master
-```
-
-- [Create a GitHub OAuth Token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/)
-  - You can then set the `GITHUB_TOKEN` to upload release notes and artifacts to github
-  - Otherwise it will fallback to username/password
 
 - Then update the `CHANGELOG.md` with an "Unreleased" section containing release notes for this version, in [KeepAChangelog](https://keepachangelog.com/en/1.1.0/) format.
 
