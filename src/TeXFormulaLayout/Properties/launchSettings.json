@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TeXFormulaLayout": {
+      "commandName": "Project",
+      "commandLineArgs": "World!"
+    }
+  }
+}
