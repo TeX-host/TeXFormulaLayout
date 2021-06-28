@@ -18,5 +18,10 @@
         <None Include="App.config" />
         <Compile Include="Main.fs" />
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\TeXFormulaLayout.Fonts\TeXFormulaLayout.Fonts.fsproj">
+        <Private>true</Private>
+      </ProjectReference>
+    </ItemGroup>
     <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
