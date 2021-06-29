@@ -82,6 +82,7 @@ module Main =
             | Some v ->
                 let color = results.GetResult Favorite_Color
                 Say.hello v |> Say.colorizeIn color
+                LoadFont.loadFont("TS", 01)
             | None -> parser.PrintUsage() |> printfn "%s"
         else
             parser.PrintUsage() |> printfn "%s"

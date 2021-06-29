@@ -14,6 +14,7 @@
         <Tailcalls>true</Tailcalls>
     </PropertyGroup>
     <ItemGroup>
+        <Compile Include="font\LoadFont.fs" />
         <Compile Include="AssemblyInfo.fs" />
         <None Include="App.config" />
         <Compile Include="Main.fs" />
