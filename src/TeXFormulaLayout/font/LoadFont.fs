@@ -99,15 +99,16 @@ module LoadFont =
         List.fold buildChar newCharInfo lineGroup
 
     /// load font info from font files.
-    /// TODO: 
+    /// 
+    /// TODO: use parser to read real .tfm fonts
     let loadFont (famliyName: String, fontSize: FontSize) : Font =
         // ---- read all lines
         let fontPath = getFontName famliyName fontSize
         let raw_lines = File.ReadLines(fontPath) |> List.ofSeq
         // filter out last line ("E")
         let lines = List.filter ((<>) "E") raw_lines
-        printfn "raw_lines = %A" raw_lines
-        printfn "lines = %A" lines
+        //printfn "raw_lines = %A" raw_lines
+        //printfn "lines = %A" lines
         /// ---- test with `loadFont "TS" 10`
         /// raw_lines = [   
         ///     "C0"; "W0.471061"; "H0.042223"; "D1.157789"; "I0"; "L20"; 
@@ -119,8 +120,8 @@ module LoadFont =
         // ---- tag lines
         let tags = List.scan countGroupID 0 lines |> List.tail
         let tagedTupList = List.zip tags lines
-        printfn "tags = %A" tags
-        printfn "tagedTupList = %A" tagedTupList
+        //printfn "tags = %A" tags
+        //printfn "tagedTupList = %A" tagedTupList
         /// tags = [1; 1; 1; 1; 1; 1; 2; 2; 2; 2; 2; 2; 2]
         /// tagedTupList = [
         ///     (1, "C0"); (1, "W0.471061"); (1, "H0.042223"); (1, "D1.157789"); 
@@ -132,9 +133,9 @@ module LoadFont =
         let groupedTupListWithGid = List.groupBy fst tagedTupList
         let groupedTupList = List.map snd groupedTupListWithGid
         let groupedList = List.map (List.map snd) groupedTupList
-        printfn "groupedTupListWithGid = %A" groupedTupListWithGid
-        printfn "groupedTupList = %A" groupedTupList
-        printfn "groupedList = %A" groupedList
+        //printfn "groupedTupListWithGid = %A" groupedTupListWithGid
+        //printfn "groupedTupList = %A" groupedTupList
+        //printfn "groupedList = %A" groupedList
         /// groupedTupListWithGid = [
         ///     (1, [(1, "C0"); 
         ///             (1, "W0.471061"); (1, "H0.042223"); (1, "D1.157789"); 
@@ -154,7 +155,7 @@ module LoadFont =
         ///     ["C1"; "W0.428238"; "H0.042223"; "D1.157789"; "T151"; "B171"; "R77"]]
 
         let font = List.map (readCharInfo fontSize) groupedList
-        printfn "font = %A" font
+        //printfn "font = %A" font
         /// font = [
         ///     { width = 5; height = 0; depth = 12; italic = 0; larger = Some 16; 
         ///         varChar = { top = None; bot = None; rep = None } }; 
