@@ -46,9 +46,8 @@ module LoadFont =
     /// Custom operator for combining paths
     let (+/) path1 path2 = Path.Combine(path1, path2)
 
-    /// get font
-    let getFontName (famliyName: String) (fontSize: FontSize) =
-        let fontDir = AppContext.BaseDirectory +/ "fonts"
+    let fontDirPath = AppContext.BaseDirectory +/ "fonts"
+    let getFontPath (fontDir) (famliyName: String) (fontSize: FontSize) =
         let fontName = famliyName + fontSize.ToString("D2")
         fontDir +/ fontName
 
@@ -101,22 +100,7 @@ module LoadFont =
     /// load font info from font files.
     /// 
     /// TODO: use parser to read real .tfm fonts
-    let loadFont (famliyName: String, fontSize: FontSize) : Font =
-        // ---- read all lines
-        let fontPath = getFontName famliyName fontSize
-        let raw_lines = File.ReadLines(fontPath) |> List.ofSeq
-        // filter out last line ("E")
-        let lines = List.filter ((<>) "E") raw_lines
-        //printfn "raw_lines = %A" raw_lines
-        //printfn "lines = %A" lines
-        /// ---- test with `loadFont "TS" 10`
-        /// raw_lines = [   
-        ///     "C0"; "W0.471061"; "H0.042223"; "D1.157789"; "I0"; "L20"; 
-        ///     "C1"; "W0.428238"; "H0.042223"; "D1.157789"; "T151"; "B171"; "R77"; "E"]
-        /// lines = [   
-        ///     "C0"; "W0.471061"; "H0.042223"; "D1.157789"; "I0"; "L20"; 
-        ///     "C1"; "W0.428238"; "H0.042223"; "D1.157789"; "T151"; "B171"; "R77"]
-        
+    let readFontInfo (fontSize: FontSize) (lines: String list) : Font =
         // ---- tag lines
         let tags = List.scan countGroupID 0 lines |> List.tail
         let tagedTupList = List.zip tags lines
@@ -162,3 +146,24 @@ module LoadFont =
         ///     { width = 4; height = 0; depth = 12; italic = 0; larger = None; 
         ///         varChar = { top = Some 105; bot = Some 121; rep = Some 63 } }]
         font
+
+    let readFontLines (fontSize: FontSize) (fontPath: String) =
+        // ---- read all lines
+        let raw_lines = File.ReadLines(fontPath) |> List.ofSeq
+        // filter out last line ("E")
+        let lines = List.filter ((<>) "E") raw_lines
+        //printfn "raw_lines = %A" raw_lines
+        //printfn "lines = %A" lines
+        /// ---- test with `loadFont "TS" 10`
+        /// raw_lines = [   
+        ///     "C0"; "W0.471061"; "H0.042223"; "D1.157789"; "I0"; "L20"; 
+        ///     "C1"; "W0.428238"; "H0.042223"; "D1.157789"; "T151"; "B171"; "R77"; "E"]
+        /// lines = [   
+        ///     "C0"; "W0.471061"; "H0.042223"; "D1.157789"; "I0"; "L20"; 
+        ///     "C1"; "W0.428238"; "H0.042223"; "D1.157789"; "T151"; "B171"; "R77"]
+
+        readFontInfo fontSize lines
+
+    let loadFont (famliyName: String, fontSize: FontSize) : Font =
+        getFontPath fontDirPath famliyName fontSize
+            |> (readFontLines fontSize)
