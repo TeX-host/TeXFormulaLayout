@@ -3,9 +3,10 @@ namespace TeXFormulaLayout.Tests
 open Expecto
 open TeXFormulaLayout
 open TeXFormulaLayout.LoadFont
+open TeXFormulaLayout.BytesOut
 
 module SayTests =
-    
+
     [<Tests>]
     let tests =
         testList "samples"
@@ -17,9 +18,9 @@ module SayTests =
                   Expect.equal subject "Hello all" "You didn't say hello" ]
 
     let TS10Font = [
-        { width = 5; height = 0; depth = 12; italic = 0; larger = Some 16; 
-            varChar = { top = None; bot = None; rep = None } }; 
-        { width = 4; height = 0; depth = 12; italic = 0; larger = None; 
+        { width = 5; height = 0; depth = 12; italic = 0; larger = Some 16;
+            varChar = { top = None; bot = None; rep = None } };
+        { width = 4; height = 0; depth = 12; italic = 0; larger = None;
             varChar = { top = Some 105; bot = Some 121; rep = Some 63 } }
     ]
 
