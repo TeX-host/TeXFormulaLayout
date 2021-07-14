@@ -14,6 +14,7 @@
         <Tailcalls>true</Tailcalls>
     </PropertyGroup>
     <ItemGroup>
+        <Compile Include="output\DVI.fs" />
         <Compile Include="font\LoadFont.fs" />
         <Compile Include="output\BytesOut.fs" />
         <Compile Include="AssemblyInfo.fs" />
