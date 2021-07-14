@@ -31,11 +31,11 @@ module LoadFont =
         /// the width of the bounding box
         width: Dist
         /// the height (above the baseline) of the bounding box
-        height: Dist    
+        height: Dist
         /// the depth (below the baseline) of the bounding box
-        depth: Dist     
+        depth: Dist
         /// the character’s “italic correction”
-        italic: Dist    
+        italic: Dist
 
         /// larger version of the same char
         larger: CharCode option
@@ -98,7 +98,7 @@ module LoadFont =
         List.fold buildChar newCharInfo lineGroup
 
     /// load font info from font files.
-    /// 
+    ///
     /// TODO: use parser to read real .tfm fonts
     let readFontInfo (fontSize: FontSize) (lines: String list) : Font =
         // ---- tag lines
@@ -108,9 +108,9 @@ module LoadFont =
         //printfn "tagedTupList = %A" tagedTupList
         /// tags = [1; 1; 1; 1; 1; 1; 2; 2; 2; 2; 2; 2; 2]
         /// tagedTupList = [
-        ///     (1, "C0"); (1, "W0.471061"); (1, "H0.042223"); (1, "D1.157789"); 
-        ///     (1, "I0");(1, "L20"); 
-        ///     (2, "C1"); (2, "W0.428238"); (2, "H0.042223"); (2, "D1.157789"); 
+        ///     (1, "C0"); (1, "W0.471061"); (1, "H0.042223"); (1, "D1.157789");
+        ///     (1, "I0");(1, "L20");
+        ///     (2, "C1"); (2, "W0.428238"); (2, "H0.042223"); (2, "D1.157789");
         ///     (2, "T151"); (2, "B171"); (2, "R77")]
 
         // ---- split lines into char group
@@ -121,18 +121,18 @@ module LoadFont =
         //printfn "groupedTupList = %A" groupedTupList
         //printfn "groupedList = %A" groupedList
         /// groupedTupListWithGid = [
-        ///     (1, [(1, "C0"); 
-        ///             (1, "W0.471061"); (1, "H0.042223"); (1, "D1.157789"); 
+        ///     (1, [(1, "C0");
+        ///             (1, "W0.471061"); (1, "H0.042223"); (1, "D1.157789");
         ///             (1, "I0"); (1, "L20")]);
-        ///     (2, [(2, "C1"); 
-        ///             (2, "W0.428238"); (2, "H0.042223"); (2, "D1.157789"); 
+        ///     (2, [(2, "C1");
+        ///             (2, "W0.428238"); (2, "H0.042223"); (2, "D1.157789");
         ///             (2, "T151"); (2, "B171"); (2, "R77")])]
         /// groupedTupList = [
-        ///     [(1, "C0"); 
-        ///         (1, "W0.471061"); (1, "H0.042223"); (1, "D1.157789"); 
+        ///     [(1, "C0");
+        ///         (1, "W0.471061"); (1, "H0.042223"); (1, "D1.157789");
         ///         (1, "I0"); (1, "L20")];
-        ///     [(2, "C1"); 
-        ///         (2, "W0.428238"); (2, "H0.042223"); (2, "D1.157789"); 
+        ///     [(2, "C1");
+        ///         (2, "W0.428238"); (2, "H0.042223"); (2, "D1.157789");
         ///         (2, "T151"); (2, "B171"); (2, "R77")]]
         /// groupedList = [
         ///     ["C0"; "W0.471061"; "H0.042223"; "D1.157789"; "I0"; "L20"];
@@ -141,9 +141,9 @@ module LoadFont =
         let font = List.map (readCharInfo fontSize) groupedList
         //printfn "font = %A" font
         /// font = [
-        ///     { width = 5; height = 0; depth = 12; italic = 0; larger = Some 16; 
-        ///         varChar = { top = None; bot = None; rep = None } }; 
-        ///     { width = 4; height = 0; depth = 12; italic = 0; larger = None; 
+        ///     { width = 5; height = 0; depth = 12; italic = 0; larger = Some 16;
+        ///         varChar = { top = None; bot = None; rep = None } };
+        ///     { width = 4; height = 0; depth = 12; italic = 0; larger = None;
         ///         varChar = { top = Some 105; bot = Some 121; rep = Some 63 } }]
         font
 
@@ -155,11 +155,11 @@ module LoadFont =
         //printfn "raw_lines = %A" raw_lines
         //printfn "lines = %A" lines
         /// ---- test with `loadFont "TS" 10`
-        /// raw_lines = [   
-        ///     "C0"; "W0.471061"; "H0.042223"; "D1.157789"; "I0"; "L20"; 
+        /// raw_lines = [
+        ///     "C0"; "W0.471061"; "H0.042223"; "D1.157789"; "I0"; "L20";
         ///     "C1"; "W0.428238"; "H0.042223"; "D1.157789"; "T151"; "B171"; "R77"; "E"]
-        /// lines = [   
-        ///     "C0"; "W0.471061"; "H0.042223"; "D1.157789"; "I0"; "L20"; 
+        /// lines = [
+        ///     "C0"; "W0.471061"; "H0.042223"; "D1.157789"; "I0"; "L20";
         ///     "C1"; "W0.428238"; "H0.042223"; "D1.157789"; "T151"; "B171"; "R77"]
 
         readFontInfo fontSize lines
