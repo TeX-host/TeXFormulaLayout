@@ -14,9 +14,11 @@
         <Tailcalls>true</Tailcalls>
     </PropertyGroup>
     <ItemGroup>
+        <Compile Include="font\FontTypes.fs" />
         <Compile Include="output\DVI.fs" />
         <Compile Include="font\LoadFont.fs" />
         <Compile Include="output\BytesOut.fs" />
+        <Compile Include="output\DviState.fs" />
         <Compile Include="AssemblyInfo.fs" />
         <None Include="App.config" />
         <Compile Include="Main.fs" />
