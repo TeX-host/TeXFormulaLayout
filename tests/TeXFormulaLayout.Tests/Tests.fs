@@ -2,6 +2,7 @@ namespace TeXFormulaLayout.Tests
 
 open Expecto
 open TeXFormulaLayout
+open TeXFormulaLayout.FontTypes
 open TeXFormulaLayout.LoadFont
 open TeXFormulaLayout.BytesOut
 
