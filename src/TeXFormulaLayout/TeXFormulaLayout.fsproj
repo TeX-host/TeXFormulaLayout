@@ -14,11 +14,20 @@
         <Tailcalls>true</Tailcalls>
     </PropertyGroup>
     <ItemGroup>
+        <!-- Types -->
         <Compile Include="font\FontTypes.fs" />
         <Compile Include="output\DVI.fs" />
-        <Compile Include="font\LoadFont.fs" />
+        
+        <!-- Deps to clr -->
         <Compile Include="output\BytesOut.fs" />
+
+        <!-- Others -->
+        <Compile Include="font\LoadFont.fs" />
+        <Compile Include="output\OutHelper.fs" />
+        <Compile Include="output\OutDVI.fs" />
         <Compile Include="output\DviState.fs" />
+
+        <!-- Main -->
         <Compile Include="AssemblyInfo.fs" />
         <None Include="App.config" />
         <Compile Include="Main.fs" />
