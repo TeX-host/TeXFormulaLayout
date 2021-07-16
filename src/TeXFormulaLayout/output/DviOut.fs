@@ -47,7 +47,7 @@ module DviOutHelper =
 
 /// Low level DVI instructions output
 module DviOut =
-    open System
+    open TeXFormulaLayout.Distance
     open TeXFormulaLayout.DviTypes
     open TeXFormulaLayout.FontTypes
     open DviOutHelper

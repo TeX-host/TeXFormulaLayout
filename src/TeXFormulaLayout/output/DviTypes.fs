@@ -1,5 +1,4 @@
 namespace TeXFormulaLayout
-open System
 
 /// Types for DVI output routines.
 module DviTypes =

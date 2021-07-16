@@ -2,7 +2,6 @@ namespace TeXFormulaLayout
 
 /// High level DVI func
 module DVI =
-    open System
     open TeXFormulaLayout.FontTypes
     open TeXFormulaLayout.DviOut
     open TeXFormulaLayout.DviState

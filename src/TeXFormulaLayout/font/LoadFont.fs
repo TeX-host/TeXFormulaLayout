@@ -5,6 +5,7 @@ module LoadFont =
     open System
     open System.IO
     open TeXFormulaLayout.FontTypes
+    open TeXFormulaLayout.Distance
 
     /// Custom operator for combining paths
     let (+/) path1 path2 = Path.Combine(path1, path2)
@@ -30,8 +31,7 @@ module LoadFont =
         // others dosn't change group id
         | _ -> id
 
-    let floatMul (d: Dist) (f: float) = round (f * float d) |> int32
-    let getDist (fontSize: FontSize) (param: String) = float param |> floatMul fontSize
+    let getDist (fontSize: FontSize) (param: String) =  floatMul (float param) (int32 fontSize)
     let getOct (param: String) = "0o" + param |> int32
 
     /// read char info from CharInfoList

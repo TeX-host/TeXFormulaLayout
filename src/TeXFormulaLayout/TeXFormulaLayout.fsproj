@@ -15,6 +15,7 @@
     </PropertyGroup>
     <ItemGroup>
         <!-- Types -->
+        <Compile Include="math\Distance.fs" />
         <Compile Include="font\FontTypes.fs" />
         <Compile Include="output\DviTypes.fs" />
         

@@ -3,19 +3,14 @@ namespace TeXFormulaLayout
 /// Types for font
 module FontTypes =
     open System
+    open TeXFormulaLayout.Distance
 
     type CharCode = Int32
     type Delim    = Int32
     type Penalty  = Int32
-    type Dist     = Int32
     type Size     = Int32
     type FontNum  = Int32
     type FontSize = Int32
-
-    [<Literal>]
-    let Zero: Dist = 0
-    [<Literal>]
-    let One: Dist = 65536 // 2^16
 
     /// xref: texbook:p199:S546
     type VarCharInfo = {
