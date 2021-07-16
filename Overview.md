@@ -15,8 +15,7 @@ Src files overview
 
 **DVI output**
 + `DviTypes`: Types for DVI output routines
-+ `OutHelper`: String and Int outoput
-+ `OutDVI`: Low level DVI instructions output
++ `DviOut`: Low level DVI instructions output
 + `DviState`: State information needed for dvi compression
 + `DVI`: (export) High level DVI func
 
