@@ -24,7 +24,7 @@
         <!-- Others -->
         <Compile Include="font\LoadFont.fs" />
         <Compile Include="output\OutHelper.fs" />
-        <Compile Include="output\OutDVI.fs" />
+        <Compile Include="output\DviOut.fs" />
         <Compile Include="output\DviState.fs" />
         <Compile Include="output\DVI.fs" />
 

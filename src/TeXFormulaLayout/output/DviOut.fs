@@ -1,7 +1,7 @@
 namespace TeXFormulaLayout
 
 /// Low level DVI instructions output
-module OutDVI =
+module DviOut =
     open System
     open TeXFormulaLayout.DviTypes
     open TeXFormulaLayout.FontTypes

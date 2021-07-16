@@ -4,7 +4,7 @@ namespace TeXFormulaLayout
 module DVI =
     open System
     open TeXFormulaLayout.FontTypes
-    open TeXFormulaLayout.OutDVI
+    open TeXFormulaLayout.DviOut
     open TeXFormulaLayout.DviState
 
     let FontDef f =
