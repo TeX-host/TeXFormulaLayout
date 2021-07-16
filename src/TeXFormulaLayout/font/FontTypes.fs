@@ -57,3 +57,11 @@ module FontTypes =
         | T  = 1
         | S  = 2
         | SS = 3
+    let fontSize (famliy, style) : FontSize =
+        match (famliy, style) with
+        | (_,   FontStyle.D ) -> 10
+        | (_,   FontStyle.T ) -> 10
+        | (FontFamily.EX, _ ) -> 10
+        | (_,   FontStyle.S ) -> 7
+        | (_,   FontStyle.SS) -> 5
+        | _ -> -1
