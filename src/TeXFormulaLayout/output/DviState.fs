@@ -33,8 +33,8 @@ module DviState =
     let defindedFonts () = !fontList
 
     let pageNum = ref 0
-    let actPage = !pageNum
-    let nextPage = inc pageNum
+    let actPage  () = !pageNum
+    let nextPage () = inc pageNum
 
     let oldPos = ref (-1)
     let newPos = ref (-1)

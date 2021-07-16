@@ -6,15 +6,15 @@ module OutDVI =
     open TeXFormulaLayout.FontTypes
     open TeXFormulaLayout.OutHelper
 
-    let setChar ch =
+    let setChar (ch: CharCode) =
         if ch < 128 then dvicmd DVICmd.SET1
         dviout ch
 
-    let putChar ch =
+    let putChar (ch: CharCode) =
         dvicmd DVICmd.PUT1
         dviout ch
 
-    let rule cmd a b =
+    let rule cmd (a: Dist) (b: Dist) =
         dvicmd cmd
         outNat1 a
         outNat1 b

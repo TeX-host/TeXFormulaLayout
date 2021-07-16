@@ -26,6 +26,7 @@
         <Compile Include="output\OutHelper.fs" />
         <Compile Include="output\OutDVI.fs" />
         <Compile Include="output\DviState.fs" />
+        <Compile Include="output\DviCmd.fs" />
 
         <!-- Main -->
         <Compile Include="AssemblyInfo.fs" />
