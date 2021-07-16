@@ -1,5 +1,6 @@
 namespace TeXFormulaLayout
 
+/// Read cm fonts
 module LoadFont =
     open System
     open System.IO

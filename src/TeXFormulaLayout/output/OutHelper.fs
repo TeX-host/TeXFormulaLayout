@@ -1,9 +1,10 @@
 namespace TeXFormulaLayout
 
+/// String and Int outoput.
 module OutHelper =
     open System
     open TeXFormulaLayout.BytesOut
-    open TeXFormulaLayout.DVI
+    open TeXFormulaLayout.DviTypes
 
     let outNat1 (i: Int32) = i |> byte |> outByte
     let outChar (c: Char) = c |> byte |> outByte

@@ -1,6 +1,6 @@
 namespace TeXFormulaLayout
 
-/// Basic binary stream output
+/// Types for font
 module FontTypes =
     open System
 

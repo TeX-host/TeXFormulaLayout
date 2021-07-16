@@ -1,6 +1,6 @@
 namespace TeXFormulaLayout
 
-/// Basic binary stream output
+/// State information needed for dvi compression
 module DviState =
     open System
     open TeXFormulaLayout.FontTypes
