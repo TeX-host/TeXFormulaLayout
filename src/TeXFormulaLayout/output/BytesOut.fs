@@ -6,33 +6,38 @@ module BytesOut =
     open System.IO
 
     /// Types
-    exception NoBinaryOut
+    exception NoBinaryOutException
 
+
+    /// Hold `BinaryWriter` ref
     let binWriter : BinaryWriter option ref = ref None
+    let getStream () =
+        match !binWriter with
+        | None    -> raise NoBinaryOutException
+        | Some bw -> bw
 
-    // func
-    let closeBinOut (bw: BinaryWriter) = bw.Close()
+
     let openBinOut fileName =
         let fs = File.Open(fileName, FileMode.Create)
         new BinaryWriter(fs)
+    let closeBinOut (bw: BinaryWriter) = bw.Close()
 
-    let startOut fileName =
+    /// Open file for output.
+    let startDviOut fileName =
         match !binWriter with
-        | None -> ()
+        | None    -> ()
         | Some bw -> closeBinOut bw
         binWriter := openBinOut fileName |> Some
+    /// Close file.
+    let endDviOut () = getStream () |> closeBinOut
 
-    let getStream () =
-        match !binWriter with
-        | None -> raise NoBinaryOut
-        | Some bw -> bw
 
+    /// Output one byte.
     let outByte (b: Byte) =
         let bw = getStream ()
         bw.Write(b)
 
+    /// Get out stream position.
     let outPos () =
         let bw = getStream ()
         bw.BaseStream.Position |> int32
-
-    let endOut () = getStream () |> closeBinOut
