@@ -15,21 +15,20 @@ module BytesOut =
         match !binWriter with
         | None    -> raise NoBinaryOutException
         | Some bw -> bw
-
-
-    let openBinOut fileName =
-        let fs = File.Open(fileName, FileMode.Create)
-        new BinaryWriter(fs)
-    let closeBinOut (bw: BinaryWriter) = bw.Close()
+    let private closeStream () =
+        match !binWriter with
+        | None    -> ()
+        | Some bw -> bw.Close()
 
     /// Open file for output.
     let startDviOut fileName =
-        match !binWriter with
-        | None    -> ()
-        | Some bw -> closeBinOut bw
-        binWriter := openBinOut fileName |> Some
+        closeStream ()
+        let fs = File.Open(fileName, FileMode.Create)
+        binWriter := new BinaryWriter(fs) |> Some
     /// Close file.
-    let endDviOut () = getStream () |> closeBinOut
+    let endDviOut () =
+        closeStream ()
+        binWriter := None
 
 
     /// Output one byte.
