@@ -4,7 +4,6 @@ open Expecto
 open TeXFormulaLayout
 open TeXFormulaLayout.FontTypes
 open TeXFormulaLayout.LoadFont
-open TeXFormulaLayout.BytesOut
 
 module SayTests =
 
@@ -42,4 +41,14 @@ module SayTests =
             [ testCase "read font info" <| fun _ ->
                 let font = fake_LoadFont("TS", 10)
                 Expect.equal font TS10Font "Bad font!"
+            ]
+
+module OutputTests =
+    open TeXFormulaLayout.BytesOut
+
+    [<Tests>]
+    let bytesOut =
+        testList "BinaryWriter"
+            [ testCase "init state" <| fun _ ->
+                Expect.equal binWriter (ref None) "Bad init state!"
             ]
