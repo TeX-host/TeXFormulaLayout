@@ -102,7 +102,20 @@ module DviOutHelperTests =
             endMemDvi ()
         }
 
+        test "out2Zero" {
+            startMemDvi ()
+            out2Zero 0
+            Expect.equal (getMemByteArray ()) [| |] "[]"
 
+            startMemDvi ()
+            out2Zero 1
+            Expect.equal (getMemByteArray ()) [| 0uy |] "[0]"
+
+            startMemDvi ()
+            out2Zero 3
+            Expect.equal (getMemByteArray ()) [| 0uy; 0uy; 0uy; |] "[0]*3"
+            endMemDvi ()
+        }
     ]
 
 

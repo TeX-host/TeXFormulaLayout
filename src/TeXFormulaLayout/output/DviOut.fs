@@ -45,23 +45,10 @@ module DviOutHelper =
     open TeXFormulaLayout.BytesOut
     open TeXFormulaLayout.DviTypes
 
-    let outChar (c: Char) = c |> byte |> outByte
     let outNat1 (i: Int32) =
         assert in1ByteRange i
         i |> byte |> outByte
     let out1Byte = outNat1
-    let dviout = outNat1
-    let dvicmd (cmd: DVICmd) = cmd |> byte |> outByte
-
-    let outStr = String.iter (byte >> outByte)
-    let outString s =
-        s |> String.length |> outNat1
-        outStr s
-
-    let rec out2Zero n =
-        match n with
-        | 0 -> ()
-        | n -> outNat1 0; out2Zero (n - 1)
 
     let outNat2 n =
         outNat1 (n / 8)
@@ -75,17 +62,35 @@ module DviOutHelper =
         outNat1 (n / 24)
         outNat3 (n % 24)
 
-    let makeNat twoI n =
+    let makeNat twoN n =
         if n >= 0 then n
-        else n + twoI
+        else n + twoN
 
     let outCmdV (cmd: DVICmd) n =
-        let code (l: Int32) = outNat1 (l + int32 cmd)
-        if  abs n >= 23  then ( code 4;  outNat4 n              ) else
-        if  abs n >= 15  then ( code 3;  outNat3 (makeNat 24 n) ) else
-        if  abs n >= 7   then ( code 2;  outNat2 (makeNat 16 n) ) else
-        if      n <> 0   then ( code 1;  outNat1 (makeNat 8  n) ) else  ()
+        let cmdN (l: Int32) = outNat1 (l + int32 cmd)
+        if  abs n >= Two23  then ( cmdN 3;  outNat4 n                 ) else
+        if  abs n >= Two15  then ( cmdN 2;  outNat3 (makeNat Two24 n) ) else
+        if  abs n >= Two7   then ( cmdN 1;  outNat2 (makeNat Two16 n) ) else
+        if      n <> 0      then ( cmdN 0;  outNat1 (makeNat Two8  n) ) else  ()
 
+
+    /// output N zeros.
+    let rec out2Zero n =
+        match n with
+        | 0 -> ()
+        | n -> outNat1 0; out2Zero (n - 1)
+
+    let outChar (c: Char) =
+        // Only accept ASCII [0,256], ignore other Unicode range.
+        assert isASCII c
+        c |> byte |> outByte
+    let outStr = String.iter (byte >> outByte)
+    let outString s =
+        s |> String.length |> outNat1
+        outStr s
+
+    let dviout = outNat1
+    let dvicmd (cmd: DVICmd) = cmd |> byte |> outByte
 
 /// Low level DVI instructions output
 module DviOut =
