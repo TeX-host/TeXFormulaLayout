@@ -1,5 +1,42 @@
 namespace TeXFormulaLayout
 
+
+module Power2Const =
+    [<Literal>]
+    let Two6 = 64
+
+    [<Literal>]
+    let Two7 = 128
+    [<Literal>]
+    let Two8 = 256
+
+    [<Literal>]
+    let Two15 = 32768
+    [<Literal>]
+    let Two16 = 65536
+
+    [<Literal>]
+    let Two23 = 8_388_608
+    [<Literal>]
+    let Two24 = 16_777_216
+
+    [<Literal>]
+    let Two29 = 536_870_912
+
+    [<Literal>]
+    let Int32Max = 2_147_483_647
+
+
+    let inRange lo hi i = lo <= i && i <= hi
+    let in1ByteRange = inRange 0 (Two8  - 1)
+    let in2ByteRange = inRange 0 (Two16 - 1)
+    let in3ByteRange = inRange 0 (Two24 - 1)
+    let in4ByteRange = inRange 0 Int32Max
+
+    let inCharRange = in1ByteRange
+    let isASCII c = c |> int |> inCharRange
+
+
 /// String and Int outoput.
 module DviOutHelper =
     open System

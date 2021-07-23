@@ -1,9 +1,6 @@
 namespace TeXFormulaLayout.Tests
-
 open Expecto
-open TeXFormulaLayout
-open TeXFormulaLayout.FontTypes
-open TeXFormulaLayout.LoadFont
+
 
 module OutputTests =
     open System.IO
@@ -56,9 +53,35 @@ module OutputTests =
                 endMemDvi ()
             }
         ] |> testSequenced  // test init first
+        
+
+module Power2ConstTests =
+    open TeXFormulaLayout.Power2Const
+
+    let twoN = pown 2
+    [<Tests>]
+    let _ = testList "Power2Const" [
+        test "all const" {
+            Expect.equal Two6 (twoN 6) "2^6"
+
+            Expect.equal Two7 (twoN 7) "2^7"
+            Expect.equal Two8 (twoN 8) "2^8"
+
+            Expect.equal Two15 (twoN 15) "2^15"
+            Expect.equal Two16 (twoN 16) "2^16"
+
+            Expect.equal Two23 (twoN 23) "2^23"
+            Expect.equal Two24 (twoN 24) "2^24"
+
+            Expect.equal Two29 (twoN 29) "2^29"
+        }
+    ]
 
 
 module SayTests =
+    open TeXFormulaLayout
+    open TeXFormulaLayout.FontTypes
+    open TeXFormulaLayout.LoadFont
 
     [<Tests>]
     let tests =
