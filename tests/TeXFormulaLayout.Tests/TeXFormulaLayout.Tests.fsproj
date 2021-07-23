@@ -10,7 +10,6 @@
         <Compile Include="output\BytesOut.fs" />
         <Compile Include="output\DviOut.fs" />
         <Compile Include="AssemblyInfo.fs" />
-        <Compile Include="Tests.fs" />
         <Compile Include="Main.fs" />
     </ItemGroup>
     <ItemGroup>
