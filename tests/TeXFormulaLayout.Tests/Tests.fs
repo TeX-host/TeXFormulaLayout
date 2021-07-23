@@ -81,72 +81,86 @@ module Power2ConstTests =
 module DviOutHelperTests =
     open OutputTests
     open TeXFormulaLayout.DviOutHelper
+    open TeXFormulaLayout.DviTypes
 
     [<Tests>]
-    let tests = testList "DviOutHelper" [
-        test "outNat1" {
-            startMemDvi ()
-            outNat1 0
-            Expect.equal (getMemByteArray ()) [| 0uy |] "0"
+    let tests =
+        testList "DviOutHelper" [
+            test "outNat1" {
+                startMemDvi ()
+                outNat1 0
+                Expect.equal (getMemByteArray ()) [| 0uy |] "0"
 
-            startMemDvi ()
-            outNat1 255
-            Expect.equal (getMemByteArray ()) [| 255uy |] "255"
+                startMemDvi ()
+                outNat1 255
+                Expect.equal (getMemByteArray ()) [| 255uy |] "255"
 
-            startMemDvi ()
-            outNat1 0
-            outNat1 255
-            outNat1 127
-            outNat1 128
-            Expect.equal (getMemByteArray ()) [| 0uy; 255uy; 127uy; 128uy |] "255"
-            endMemDvi ()
-        }
+                startMemDvi ()
+                outNat1 0
+                outNat1 255
+                outNat1 127
+                outNat1 128
+                Expect.equal (getMemByteArray ()) [| 0uy; 255uy; 127uy; 128uy |] "255"
+                endMemDvi ()
+            }
 
-        test "out2Zero" {
-            startMemDvi ()
-            out2Zero 0
-            Expect.equal (getMemByteArray ()) [| |] "[]"
+            test "out2Zero" {
+                startMemDvi ()
+                out2Zero 0
+                Expect.equal (getMemByteArray ()) [| |] "[]"
 
-            startMemDvi ()
-            out2Zero 1
-            Expect.equal (getMemByteArray ()) [| 0uy |] "[0]"
+                startMemDvi ()
+                out2Zero 1
+                Expect.equal (getMemByteArray ()) [| 0uy |] "[0]"
 
-            startMemDvi ()
-            out2Zero 3
-            Expect.equal (getMemByteArray ()) [| 0uy; 0uy; 0uy; |] "[0,0,0]"
-            endMemDvi ()
-        }
+                startMemDvi ()
+                out2Zero 3
+                Expect.equal (getMemByteArray ()) [| 0uy; 0uy; 0uy; |] "[0,0,0]"
+                endMemDvi ()
+            }
 
-        test "outStr" {
-            startMemDvi ()
-            outStr ""
-            Expect.equal (getMemByteArray ()) [| |] "[]"
+            test "outStr" {
+                startMemDvi ()
+                outStr ""
+                Expect.equal (getMemByteArray ()) [| |] "[]"
 
-            startMemDvi ()
-            outStr "abc"
-            Expect.equal (getMemByteArray ()) [| 97uy; 98uy; 99uy; |] "[97,98,99]"
+                startMemDvi ()
+                outStr "abc"
+                Expect.equal (getMemByteArray ()) [| 97uy; 98uy; 99uy; |] "[97,98,99]"
 
-            startMemDvi ()
-            outStr "123"
-            Expect.equal (getMemByteArray ()) [| 49uy; 50uy; 51uy; |] "[49,50,51]"
-            endMemDvi ()
-        }
+                startMemDvi ()
+                outStr "123"
+                Expect.equal (getMemByteArray ()) [| 49uy; 50uy; 51uy; |] "[49,50,51]"
+                endMemDvi ()
+            }
 
-        test "outString" {
-            startMemDvi ()
-            outString ""
-            Expect.equal (getMemByteArray ()) [| 0uy |] "[0]"
+            test "outString" {
+                startMemDvi ()
+                outString ""
+                Expect.equal (getMemByteArray ()) [| 0uy |] "[0]"
 
-            startMemDvi ()
-            outString "abc"
-            Expect.equal (getMemByteArray ()) [| 3uy; 97uy; 98uy; 99uy; |] "[3,97,98,99]"
+                startMemDvi ()
+                outString "abc"
+                Expect.equal (getMemByteArray ()) [| 3uy; 97uy; 98uy; 99uy; |] "[3,97,98,99]"
 
-            startMemDvi ()
-            outString "123"
-            Expect.equal (getMemByteArray ()) [| 3uy; 49uy; 50uy; 51uy; |] "[3,49,50,51]"
-            endMemDvi ()
-        }
-    ]
+                startMemDvi ()
+                outString "123"
+                Expect.equal (getMemByteArray ()) [| 3uy; 49uy; 50uy; 51uy; |] "[3,49,50,51]"
+                endMemDvi ()
+            }
+
+            test "dvicmd" {
+                startMemDvi ()
+                dvicmd DVICmd.SET_CHAR_0
+                Expect.equal (getMemByteArray ()) [| 0uy |] "[0]"
+
+                startMemDvi ()
+                dvicmd DVICmd.POST_POST
+                Expect.equal (getMemByteArray ()) [| 249uy |] "[249]"
+
+                endMemDvi ()
+            }
+        ] |> testSequenced
 
 
 module SayTests =
