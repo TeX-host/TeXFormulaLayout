@@ -6,6 +6,7 @@
         <GenerateProgramFile>false</GenerateProgramFile>
     </PropertyGroup>
     <ItemGroup>
+        <Compile Include="font\LoadFont.fs" />
         <Compile Include="output\BytesOut.fs" />
         <Compile Include="output\DviOut.fs" />
         <Compile Include="AssemblyInfo.fs" />
