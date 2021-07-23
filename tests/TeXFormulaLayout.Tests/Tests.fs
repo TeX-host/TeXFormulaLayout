@@ -60,7 +60,7 @@ module Power2ConstTests =
 
     let twoN = pown 2
     [<Tests>]
-    let _ = testList "Power2Const" [
+    let tests = testList "Power2Const" [
         test "all const" {
             Expect.equal Two6 (twoN 6) "2^6"
 
@@ -75,6 +75,34 @@ module Power2ConstTests =
 
             Expect.equal Two29 (twoN 29) "2^29"
         }
+    ]
+
+
+module DviOutHelperTests =
+    open OutputTests
+    open TeXFormulaLayout.DviOutHelper
+
+    [<Tests>]
+    let tests = testList "DviOutHelper" [
+        test "outNat1" {
+            startMemDvi ()
+            outNat1 0
+            Expect.equal (getMemByteArray ()) [| 0uy |] "0"
+
+            startMemDvi ()
+            outNat1 255
+            Expect.equal (getMemByteArray ()) [| 255uy |] "255"
+
+            startMemDvi ()
+            outNat1 0
+            outNat1 255
+            outNat1 127
+            outNat1 128
+            Expect.equal (getMemByteArray ()) [| 0uy; 255uy; 127uy; 128uy |] "255"
+            endMemDvi ()
+        }
+
+
     ]
 
 

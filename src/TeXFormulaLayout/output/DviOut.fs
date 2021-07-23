@@ -38,13 +38,18 @@ module Power2Const =
 
 
 /// String and Int outoput.
+/// 封装 outByte 提供字符串和数字的输出接口。
 module DviOutHelper =
     open System
+    open Power2Const
     open TeXFormulaLayout.BytesOut
     open TeXFormulaLayout.DviTypes
 
-    let outNat1 (i: Int32) = i |> byte |> outByte
     let outChar (c: Char) = c |> byte |> outByte
+    let outNat1 (i: Int32) =
+        assert in1ByteRange i
+        i |> byte |> outByte
+    let out1Byte = outNat1
     let dviout = outNat1
     let dvicmd (cmd: DVICmd) = cmd |> byte |> outByte
 
