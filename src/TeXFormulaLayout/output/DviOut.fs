@@ -23,6 +23,7 @@ module Power2Const =
     [<Literal>]
     let Two29 = 536_870_912
 
+    /// 2^31 - 1
     [<Literal>]
     let Int32Max = 2_147_483_647
 
@@ -46,21 +47,16 @@ module DviOutHelper =
     open TeXFormulaLayout.DviTypes
 
     let outNat1 (i: Int32) =
-        assert in1ByteRange i
         i |> byte |> outByte
-    let out1Byte = outNat1
-
     let outNat2 n =
-        outNat1 (n / 8)
-        outNat1 (n % 8)
-
+        outNat1 (n / Two8)
+        outNat1 (n % Two8)
     let outNat3 n =
-        outNat1 (n / 16)
-        outNat2 (n % 16)
-
+        outNat1 (n / Two16)
+        outNat2 (n % Two16)
     let outNat4 n =
-        outNat1 (n / 24)
-        outNat3 (n % 24)
+        outNat1 (n / Two24)
+        outNat3 (n % Two24)
 
     let makeNat twoN n =
         if n >= 0 then n
@@ -91,6 +87,7 @@ module DviOutHelper =
 
     let dviout = outNat1
     let dvicmd (cmd: DVICmd) = cmd |> byte |> outByte
+    
 
 /// Low level DVI instructions output
 module DviOut =

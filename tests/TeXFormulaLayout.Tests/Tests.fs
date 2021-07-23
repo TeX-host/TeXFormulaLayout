@@ -82,6 +82,7 @@ module DviOutHelperTests =
     open OutputTests
     open TeXFormulaLayout.DviOutHelper
     open TeXFormulaLayout.DviTypes
+    open TeXFormulaLayout.Power2Const
 
     [<Tests>]
     let tests =
@@ -100,7 +101,31 @@ module DviOutHelperTests =
                 outNat1 255
                 outNat1 127
                 outNat1 128
-                Expect.equal (getMemByteArray ()) [| 0uy; 255uy; 127uy; 128uy |] "255"
+                Expect.equal (getMemByteArray ()) [| 0uy; 255uy; 127uy; 128uy |] "[0,255,127,128]"
+                endMemDvi ()
+            }
+
+            test "outNat2~4" {
+                startMemDvi ()
+                outNat2 Two7
+                Expect.equal (getMemByteArray ()) [| 0uy; 128uy |] "2^7"
+                startMemDvi ()
+                outNat2 (Two15 - 1)
+                Expect.equal (getMemByteArray ()) [| 127uy; 255uy |] "2^15-1"
+
+                startMemDvi ()
+                outNat3 Two15
+                Expect.equal (getMemByteArray ()) [| 0uy; 128uy; 0uy |] "2^15"
+                startMemDvi ()
+                outNat3 (Two23 - 1)
+                Expect.equal (getMemByteArray ()) [| 127uy; 255uy; 255uy |] "2^23-1"
+
+                startMemDvi ()
+                outNat4 Two23
+                Expect.equal (getMemByteArray ()) [| 0uy; 128uy; 0uy; 0uy |] "2^23"
+                startMemDvi ()
+                outNat4 Int32Max
+                Expect.equal (getMemByteArray ()) [| 127uy; 255uy; 255uy; 255uy |] "2^31-1"
                 endMemDvi ()
             }
 
@@ -157,7 +182,6 @@ module DviOutHelperTests =
                 startMemDvi ()
                 dvicmd DVICmd.POST_POST
                 Expect.equal (getMemByteArray ()) [| 249uy |] "[249]"
-
                 endMemDvi ()
             }
         ] |> testSequenced
