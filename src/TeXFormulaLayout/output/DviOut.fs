@@ -62,7 +62,7 @@ module DviOutHelper =
         if n >= 0 then n
         else n + twoN
 
-    let outCmdV (cmd: DVICmd) n =
+    let outCmdN (cmd: DVICmd) n =
         let cmdN (l: Int32) = outNat1 (l + int32 cmd)
         if  abs n >= Two23  then ( cmdN 3;  outNat4 n                 ) else
         if  abs n >= Two15  then ( cmdN 2;  outNat3 (makeNat Two24 n) ) else
@@ -112,8 +112,8 @@ module DviOut =
     let setRule = rule DVICmd.SET_RULE
     let putRule = rule DVICmd.PUT_RULE
 
-    let down = outCmdV DVICmd.X4
-    let right = outCmdV DVICmd.SET_RULE
+    let down = outCmdN DVICmd.DOWN1
+    let right = outCmdN DVICmd.RIGHT1
 
     let push () = dvicmd DVICmd.PUSH
     let pop () = dvicmd DVICmd.POP
