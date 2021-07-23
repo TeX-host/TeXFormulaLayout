@@ -131,6 +131,21 @@ module DviOutHelperTests =
             Expect.equal (getMemByteArray ()) [| 49uy; 50uy; 51uy; |] "[49,50,51]"
             endMemDvi ()
         }
+
+        test "outString" {
+            startMemDvi ()
+            outString ""
+            Expect.equal (getMemByteArray ()) [| 0uy |] "[0]"
+
+            startMemDvi ()
+            outString "abc"
+            Expect.equal (getMemByteArray ()) [| 3uy; 97uy; 98uy; 99uy; |] "[3,97,98,99]"
+
+            startMemDvi ()
+            outString "123"
+            Expect.equal (getMemByteArray ()) [| 3uy; 49uy; 50uy; 51uy; |] "[3,49,50,51]"
+            endMemDvi ()
+        }
     ]
 
 
