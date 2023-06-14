@@ -123,6 +123,12 @@ module DviOutHelper =
         outNat1 arg1
 
 
+(* Routines which output dvi instructions.
+    refs:
+        1. tex.pdf      https://texdoc.org/serve/tex/0
+        2. DVI.format   http://mirrors.ctan.org/dviware/dvi2tty/DVI.format
+        3. dvi.html     https://web.archive.org/web/20070403030353/http://www.math.umd.edu/~asnowden/comp-cont/dvi.html#bop
+ *)
 /// Low level DVI instructions output
 module DviOut =
     open Power2Const
