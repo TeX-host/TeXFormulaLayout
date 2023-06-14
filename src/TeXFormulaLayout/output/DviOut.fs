@@ -62,12 +62,16 @@ module DviOutHelper =
         if n >= 0 then n
         else n + twoN
 
+    /// Auto choose instruction `DviCmd_i`, with i in [1, 4]
     let outCmdN (cmd: DviCmd) n =
-        let cmdN (l: Int32) = outNat1 (l + int32 cmd)
+        /// Output DviCmd with offset i
+        let cmdN i = outNat1 (i + int cmd)
+        // TODO: 使用更精确的范围 [-128, 128)
         if  abs n >= Two23  then ( cmdN 3;  outNat4 n                 ) else
         if  abs n >= Two15  then ( cmdN 2;  outNat3 (makeNat Two24 n) ) else
         if  abs n >= Two7   then ( cmdN 1;  outNat2 (makeNat Two16 n) ) else
         if      n <> 0      then ( cmdN 0;  outNat1 (makeNat Two8  n) ) else  ()
+        /// 处理 n == 0
 
 
     /// output N zeros.
@@ -97,6 +101,7 @@ module DviOutHelper =
 
 /// Low level DVI instructions output
 module DviOut =
+    open Power2Const
     open TeXFormulaLayout.Distance
     open TeXFormulaLayout.DviTypes
     open TeXFormulaLayout.FontTypes
@@ -169,8 +174,23 @@ module DviOut =
     /// Move down a[1..4] units. Set v ← v+a
     let down = outCmdN DviCmd.DOWN1
 
-
-    let font f = (f + int32 DviCmd.FNT_NUM_0) |> dviout
+    /// Check input font range.
+    let private (|FNT_NUM|FNT_1|FNT_i|INVALID_FNT|) fnt =
+        match fnt with
+        // [  0, 64) => FNT_NUM_i
+        | f when 0 <= f && f < 64 -> FNT_NUM
+        // [64, 256) => FNT_1
+        | f when 64 <= f && f < 256 -> FNT_1
+        // [64, 2^32) => FNT_i, i in [2，4]
+        | f when 256 <= f && f <= Int32Max -> FNT_i
+        // (-Inf, 0) && [2^32, Inf)
+        | _ -> INVALID_FNT
+    /// Set font `f`
+    let font f =
+        match f with
+        | FNT_NUM -> dviout (f + int DviCmd.FNT_NUM_0)
+        | FNT_1 -> dviCmdArg1 DviCmd.FNT1 f
+        | FNT_i | INVALID_FNT -> invalidArg (nameof f) "Font number not in [0, 256)"
 
     // TODO: distInt
     let int2Dist = id
