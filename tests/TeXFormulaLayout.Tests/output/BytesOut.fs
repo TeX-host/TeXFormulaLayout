@@ -11,12 +11,12 @@ let getMemByteArray () =
     mem.ToArray()
 
 let startMemDvi () =
-    match !binWriter with
+    match !gBinaryWriterRef with
     | None    -> ()
     | Some bw -> bw.Close()
     let mem = new MemoryStream()
     memStream := Some mem
-    binWriter := new BinaryWriter(mem) |> Some
+    gBinaryWriterRef := new BinaryWriter(mem) |> Some
 let endMemDvi = endDviOut
 
 
@@ -24,13 +24,13 @@ let endMemDvi = endDviOut
 let tests =
     testList "BinaryWriter" [
         testCase "binWriter (init)" <| fun _ ->
-            Expect.equal binWriter (ref None) "Bad init state!"
+            Expect.equal gBinaryWriterRef (ref None) "Bad init state!"
         testCase "getStream raise" <| fun _ ->
             Expect.throwsT<NoBinaryOutException> (getStream >> ignore) "Not raise NoBinaryOutException"
 
         test "startMemDvi" {
             startMemDvi ()
-            Expect.equal (getStream ()) (!binWriter |> Option.get) "Bad getStream func with startMemDvi"
+            Expect.equal (getStream ()) (!gBinaryWriterRef |> Option.get) "Bad getStream func with startMemDvi"
         }
         test "endMemDvi" {
             endMemDvi ()

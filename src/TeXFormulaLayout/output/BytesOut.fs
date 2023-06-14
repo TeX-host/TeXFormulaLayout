@@ -10,16 +10,16 @@ module BytesOut =
 
 
     /// Hold ref to global output stream (`BinaryWriter`).
-    let binWriter : BinaryWriter option ref = ref None
+    let gBinaryWriterRef : BinaryWriter option ref = ref None
 
     /// Get global output stream.
     let getStream () =
-        match binWriter.Value with
+        match gBinaryWriterRef.Value with
         | None    -> raise NoBinaryOutException
         | Some bw -> bw
     /// Close global output stream.
     let private closeStream () =
-        match binWriter.Value with
+        match gBinaryWriterRef.Value with
         | None    -> ()
         | Some bw -> bw.Close()
 
@@ -28,11 +28,11 @@ module BytesOut =
     let startDviOut fileName =
         closeStream ()
         let fs = File.Open(fileName, FileMode.Create)
-        binWriter.Value <- new BinaryWriter(fs) |> Some
+        gBinaryWriterRef.Value <- new BinaryWriter(fs) |> Some
     /// Close file.
     let endDviOut () =
         closeStream ()
-        binWriter.Value <- None
+        gBinaryWriterRef.Value <- None
 
 
     /// Output one byte.
