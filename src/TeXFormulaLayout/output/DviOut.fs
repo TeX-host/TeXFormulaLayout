@@ -164,9 +164,11 @@ module DviOut =
     /// Pop the top state off of the stack and re-assign them.
     let pop () = dvicmd DviCmd.POP
 
-
-    let down = outCmdN DviCmd.DOWN1
+    /// Move right b[1..4] units., Set h ← h+b
     let right = outCmdN DviCmd.RIGHT1
+    /// Move down a[1..4] units. Set v ← v+a
+    let down = outCmdN DviCmd.DOWN1
+
 
     let font f = (f + int32 DviCmd.FNT_NUM_0) |> dviout
 
