@@ -65,6 +65,16 @@ module DviOutHelper =
         outNat3 (n % Two24)
 
 
+    /// Output value n times
+    let rec outValNTimes value n =
+        match n with
+        | 0 -> ()
+        | n -> outNat1 value; outValNTimes value (n - 1)
+
+    /// output N zeros.
+    let outZerosN = outValNTimes 0
+
+
     let makeNat twoN n =
         if n >= 0 then n
         else n + twoN
@@ -80,14 +90,7 @@ module DviOutHelper =
         if      n <> 0      then ( cmdN 0;  outNat1 (makeNat Two8  n) ) else  ()
         /// 处理 n == 0
 
-    /// Output value n times
-    let rec outValNTimes value n =
-        match n with
-        | 0 -> ()
-        | n -> outNat1 value; outValNTimes value (n - 1)
 
-    /// output N zeros.
-    let outZerosN = outValNTimes 0
 
     let outChar (c: Char) =
         // Only accept ASCII [0,256], ignore other Unicode range.
