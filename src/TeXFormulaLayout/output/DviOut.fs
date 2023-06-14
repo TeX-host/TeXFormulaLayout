@@ -46,17 +46,24 @@ module DviOutHelper =
     open TeXFormulaLayout.BytesOut
     open TeXFormulaLayout.DviTypes
 
-    let outNat1 (i: Int32) =
-        i |> byte |> outByte
+    (** -- Output 1~4 bytes -- **)
+    /// Output 1 byte.
+    let outNat1 n =
+        // NOTE: byte(-1) == byte(255);  byte(256) == byte(0)
+        n |> byte |> outByte
+    /// Output 2 byte.
     let outNat2 n =
         outNat1 (n / Two8)
         outNat1 (n % Two8)
+    /// Output 3 byte.
     let outNat3 n =
         outNat1 (n / Two16)
         outNat2 (n % Two16)
+    /// Output 4 byte.
     let outNat4 n =
         outNat1 (n / Two24)
         outNat3 (n % Two24)
+
 
     let makeNat twoN n =
         if n >= 0 then n
