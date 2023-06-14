@@ -79,7 +79,8 @@ module DviOutHelper =
         // Only accept ASCII [0,256], ignore other Unicode range.
         assert isASCII c
         c |> byte |> outByte
-    let outStr = String.iter (byte >> outByte)
+    /// output string in bytes
+    let private outStr = String.iter outChar
     let outString s =
         s |> String.length |> outNat1
         outStr s
