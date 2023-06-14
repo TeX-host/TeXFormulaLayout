@@ -75,23 +75,6 @@ module DviOutHelper =
     let outZerosN = outValNTimes 0
 
 
-    let makeNat twoN n =
-        if n >= 0 then n
-        else n + twoN
-
-    /// Auto choose instruction `DviCmd_i`, with i in [1, 4]
-    let outCmdN (cmd: DviCmd) n =
-        /// Output DviCmd with offset i
-        let cmdN i = outNat1 (i + int cmd)
-        // TODO: 使用更精确的范围 [-128, 128)
-        if  abs n >= Two23  then ( cmdN 3;  outNat4 n                 ) else
-        if  abs n >= Two15  then ( cmdN 2;  outNat3 (makeNat Two24 n) ) else
-        if  abs n >= Two7   then ( cmdN 1;  outNat2 (makeNat Two16 n) ) else
-        if      n <> 0      then ( cmdN 0;  outNat1 (makeNat Two8  n) ) else  ()
-        /// 处理 n == 0
-
-
-
     let outChar (c: Char) =
         // Only accept ASCII [0,256], ignore other Unicode range.
         assert isASCII c
@@ -109,7 +92,22 @@ module DviOutHelper =
     let dviCmdArg1 (cmd: DviCmd) arg1 =
         dvicmd cmd
         dviout arg1
-    
+
+
+    let private makeNat twoN n =
+        if n >= 0 then n
+        else n + twoN
+    /// Auto choose instruction `DviCmd_i`, with i in [1, 4]
+    let outCmdN (cmd: DviCmd) n =
+        /// Output DviCmd with offset i
+        let cmdN i = outNat1 (i + int cmd)
+        // TODO: 使用更精确的范围 [-128, 128)
+        if  abs n >= Two23  then ( cmdN 3;  outNat4 n                 ) else
+        if  abs n >= Two15  then ( cmdN 2;  outNat3 (makeNat Two24 n) ) else
+        if  abs n >= Two7   then ( cmdN 1;  outNat2 (makeNat Two16 n) ) else
+        if      n <> 0      then ( cmdN 0;  outNat1 (makeNat Two8  n) ) else  ()
+        /// 处理 n == 0
+
 
 /// Low level DVI instructions output
 module DviOut =
