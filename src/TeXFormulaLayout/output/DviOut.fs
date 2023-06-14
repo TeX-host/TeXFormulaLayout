@@ -115,14 +115,12 @@ module DviOutHelper =
 
 
     (** -- DVI helper functions -- **)
-    /// Output 1 `int`.
-    let dviout = outNat1
     /// Output only 1 `DviCmd`.
     let dviCmd (cmd: DviCmd) = cmd |> byte |> outByte
     /// Output 1 `DviCmd` with 1 `int` arg.
     let dviCmdArg1 (cmd: DviCmd) arg1 =
         dviCmd cmd
-        dviout arg1
+        outNat1 arg1
 
 
 /// Low level DVI instructions output
@@ -147,7 +145,7 @@ module DviOut =
     ///     then increase `h` by the width of that character.
     let setChar (ch: CharCode) =
         match ch with
-        | SET_CHAR_i    -> dviout ch
+        | SET_CHAR_i    -> outNat1 ch
         | SET1          -> dviCmdArg1 DviCmd.SET1 ch
         | INVALID_RANGE -> invalidArg (nameof ch) "Char not in [0, 256)"
 
@@ -214,7 +212,7 @@ module DviOut =
     /// Set font `f`
     let font f =
         match f with
-        | FNT_NUM -> dviout (f + int DviCmd.FNT_NUM_0)
+        | FNT_NUM -> outNat1 (f + int DviCmd.FNT_NUM_0)
         | FNT_1 -> dviCmdArg1 DviCmd.FNT1 f
         | FNT_i | INVALID_FNT -> invalidArg (nameof f) "Font number not in [0, 256)"
 
@@ -245,7 +243,7 @@ module DviOut =
 
         dviCmd DviCmd.FNT_DEF_1
         // k[1]: font number
-        dviout nr
+        outNat1 nr
         // c[4]: checksum
         outZerosN 4
         // s[4]: scale
