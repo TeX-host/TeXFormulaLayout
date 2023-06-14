@@ -238,18 +238,37 @@ module DviOut =
         | h :: t -> fontDef h; fontDefs t
 
 
-    let version () = outNat1 2
-    let numDen () =
-        outNat4 25400000
-        outNat4 473628672
+    (** -- help func for `pre` -- **)
+    /// DVI format version (`id_byte` in TeX): i[1]
+    let private version () = outNat1 2
+    /// num[4]/den[4] = 25400000/473628672
+    let private numDen () =
+        // 254cm * 10e5
+        outNat4 25_400_000
+        // 7227pt * 2e16sp
+        outNat4 473_628_672
+    /// print banner: k[1], x[k]
     let banner () = outString "Inky's Formula Formatter"
 
+    (* [tex#587p218]  PRE: i[1];  num[4], den[4];  mag[4];  k[1], x[k]
+
+        version_id         1 ubyte     (should be version 2)
+        numerator          4 ubytes    (numerater must equal the one in postamble)
+        denominator        4 ubytes    (denominator must equal the one in postamble)
+        magnification      4 ubytes    (magnification must equal the one in postamble)
+        id_len             1 ubyte     (lenght of identification string)
+        id_string     id_len ubytes    (identification string)
+
+        xref: DVI.format
+     *)
+    /// preamble
     let pre mag =
         dvicmd DviCmd.PRE
         version ()
         numDen ()
         outNat4 mag
         banner ()
+
 
     let rec trailer n =
         match n with
