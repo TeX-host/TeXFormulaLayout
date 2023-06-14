@@ -17,7 +17,7 @@ let startMemDvi () =
     let mem = new MemoryStream()
     memStream := Some mem
     gBinaryWriterRef := new BinaryWriter(mem) |> Some
-let endMemDvi = endDviOut
+let endMemDvi = endOut
 
 
 [<Tests>]

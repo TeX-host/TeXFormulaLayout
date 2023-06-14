@@ -30,7 +30,7 @@ module BytesOut =
         let fs = File.Open(fileName, FileMode.Create)
         gBinaryWriterRef.Value <- new BinaryWriter(fs) |> Some
     /// Close file.
-    let endDviOut () =
+    let endOut () =
         closeStream ()
         gBinaryWriterRef.Value <- None
 
