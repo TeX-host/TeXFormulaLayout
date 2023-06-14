@@ -6,19 +6,19 @@ module DviState =
     open TeXFormulaLayout.FontTypes
     open TeXFormulaLayout.BytesOut
 
-    let incN (n: Int32) (r: Int32 ref) = r := !r + n
-    let inc = incN  1
-    let dec = incN -1
+    let incRef (n: Int32) (r: Int32 ref) = r := !r + n
+    let inc = incRef  1
+    let dec = incRef -1
 
     let xMove = ref 0
     let resetX () = xMove := 0
     let getX   () = !xMove
-    let moveX  dx = incN dx xMove
+    let moveX  dx = incRef dx xMove
 
     let yMove = ref 0
     let resetY () = yMove := 0
     let getY   () = !yMove
-    let moveY  dy = incN dy yMove
+    let moveY  dy = incRef dy yMove
 
     let NoFont  = -1
     let actFont = ref NoFont
