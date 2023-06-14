@@ -7,7 +7,7 @@ module DviTypes =
     type DVICmd =
         /// typeset character 0 and move right
         | SET_CHAR_0 = 0
-        /// EMIT SET_CHAR_[1~126]
+        (*  EMIT SET_CHAR_[1~126]  *)
         | SET_CHAR_127 = 127
 
         /// typeset a character and move right
@@ -83,7 +83,7 @@ module DviTypes =
         /// set current font to 0
         | FNT_NUM_0 = 171
         | FNT_NUM_1 = 172
-        // emit fnt_num_(2~62)
+        (*  emit FNT_NUM_[2~62]  *)
         | FNT_NUM_63 = 234
 
         /// set current font
@@ -112,5 +112,5 @@ module DviTypes =
         /// postamble ending
         | POST_POST = 249
 
-        // [250~255] are undefined at the present time
+        (*  [250~255] are undefined at the present time  *)
     // end enum DVICommands
