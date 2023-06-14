@@ -198,8 +198,13 @@ module DviOut =
 
     /// Move right b[1..4] units., Set h ← h+b
     let right = outCmdN DviCmd.RIGHT1
+
+    (* Skip `w0~w4`[147, 151], `x0~x4`[152, 156] *)
+
     /// Move down a[1..4] units. Set v ← v+a
     let down = outCmdN DviCmd.DOWN1
+
+    (* Skip `y0~y4`[161, 165], `z0~z4`[166, 170] *)
 
     /// Check input font range.
     let private (|FNT_NUM|FNT_1|FNT_i|INVALID_FNT|) fnt =
@@ -218,6 +223,8 @@ module DviOut =
         | FNT_NUM -> outNat1 (f + int DviCmd.FNT_NUM_0)
         | FNT_1 -> dviCmdArg1 DviCmd.FNT1 f
         | FNT_i | INVALID_FNT -> invalidArg (nameof f) "Font number not in [0, 256)"
+
+    (* Skip `xxx1 ~ xxx4`[239, 242] *)
 
     // TODO: distInt
     let int2Dist = id
