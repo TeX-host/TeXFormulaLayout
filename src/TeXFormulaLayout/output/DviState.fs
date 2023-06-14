@@ -11,17 +11,20 @@ module DviState =
     let inc = incRef  1
     let dec = incRef -1
 
+    /// `dvi_h`
     let xMove = ref 0
     let resetX () = xMove := 0
     let getX   () = !xMove
     let moveX  dx = incRef dx xMove
 
+    /// `dvi_v`
     let yMove = ref 0
     let resetY () = yMove := 0
     let getY   () = !yMove
     let moveY  dy = incRef dy yMove
 
     let NoFont  = -1
+    /// `dvi_f`
     let actFont = ref NoFont
     let resetFont () = actFont := NoFont
     let isSameFont f = !actFont = f
@@ -33,10 +36,12 @@ module DviState =
     let addFont f = fontList := f :: !fontList
     let defindedFonts () = !fontList
 
+    /// `total_pages`
     let pageNum = ref 0
     let actPage  () = !pageNum
     let nextPage () = inc pageNum
 
+    /// `last_bop`
     let oldPos = ref (-1)
     let newPos = ref (-1)
     let prevPos () = !oldPos
@@ -45,6 +50,7 @@ module DviState =
         oldPos := actPos ()
         newPos := outPos ()
 
+    /// `curs`
     let ActLevel = ref 0
     let MaxLevel = ref 0
     let incLevel () =
