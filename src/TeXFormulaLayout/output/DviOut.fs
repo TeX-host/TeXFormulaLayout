@@ -73,12 +73,14 @@ module DviOutHelper =
         if      n <> 0      then ( cmdN 0;  outNat1 (makeNat Two8  n) ) else  ()
         /// 处理 n == 0
 
-
-    /// output N zeros.
-    let rec outZerosN n =
+    /// Output value n times
+    let rec outValNTimes value n =
         match n with
         | 0 -> ()
-        | n -> outNat1 0; outZerosN (n - 1)
+        | n -> outNat1 value; outValNTimes value (n - 1)
+
+    /// output N zeros.
+    let outZerosN = outValNTimes 0
 
     let outChar (c: Char) =
         // Only accept ASCII [0,256], ignore other Unicode range.
@@ -298,10 +300,7 @@ module DviOut =
 
     (** -- help func for `postpost` -- **)
     /// Output N 233
-    let rec private trailer n =
-        match n with
-        | 0 -> ()
-        | _ -> dviout 223; trailer (n - 1)
+    let private trailer n = outValNTimes 233
     (* [tex-p220#590]  post_post; q[4], i[1]; 223's
 
         postamble_offset   4 sbytes    (offset in file where postamble starts)
