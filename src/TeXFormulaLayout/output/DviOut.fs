@@ -99,16 +99,6 @@ module DviOutHelper =
         outStr s
 
 
-    /// Output 1 `int`.
-    let dviout = outNat1
-    /// Output only 1 `DviCmd`.
-    let dvicmd (cmd: DviCmd) = cmd |> byte |> outByte
-    /// Output 1 `DviCmd` with 1 `int` arg.
-    let dviCmdArg1 (cmd: DviCmd) arg1 =
-        dvicmd cmd
-        dviout arg1
-
-
     let private makeNat twoN n =
         if n >= 0 then n
         else n + twoN
@@ -122,6 +112,17 @@ module DviOutHelper =
         if  abs n >= Two7   then ( cmdN 1;  outNat2 (makeNat Two16 n) ) else
         if      n <> 0      then ( cmdN 0;  outNat1 (makeNat Two8  n) ) else  ()
         /// 处理 n == 0
+
+
+    (** -- DVI helper functions -- **)
+    /// Output 1 `int`.
+    let dviout = outNat1
+    /// Output only 1 `DviCmd`.
+    let dvicmd (cmd: DviCmd) = cmd |> byte |> outByte
+    /// Output 1 `DviCmd` with 1 `int` arg.
+    let dviCmdArg1 (cmd: DviCmd) arg1 =
+        dvicmd cmd
+        dviout arg1
 
 
 /// Low level DVI instructions output
