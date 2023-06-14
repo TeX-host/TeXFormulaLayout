@@ -26,7 +26,7 @@ let tests =
         testCase "binWriter (init)" <| fun _ ->
             Expect.equal gBinaryWriterRef (ref None) "Bad init state!"
         testCase "getStream raise" <| fun _ ->
-            Expect.throwsT<NoBinaryOutException> (getStream >> ignore) "Not raise NoBinaryOutException"
+            Expect.throwsT<BinaryWriterUninitializedException> (getStream >> ignore) "Not raise NoBinaryOutException"
 
         test "startMemDvi" {
             startMemDvi ()
@@ -34,7 +34,7 @@ let tests =
         }
         test "endMemDvi" {
             endMemDvi ()
-            Expect.throwsT<NoBinaryOutException> (getStream >> ignore) "Bad getStream func with endMemDvi"
+            Expect.throwsT<BinaryWriterUninitializedException> (getStream >> ignore) "Bad getStream func with endMemDvi"
         }
 
         test "outByte" {

@@ -6,7 +6,7 @@ module BytesOut =
     open System.IO
 
     /// Uninitialized global output stream
-    exception NoBinaryOutException
+    exception BinaryWriterUninitializedException
 
 
     /// Hold ref to global output stream (`BinaryWriter`).
@@ -15,7 +15,7 @@ module BytesOut =
     /// Get global output stream.
     let getStream () =
         match gBinaryWriterRef.Value with
-        | None    -> raise NoBinaryOutException
+        | None    -> raise BinaryWriterUninitializedException
         | Some bw -> bw
     /// Close global output stream.
     let private closeStream () =
