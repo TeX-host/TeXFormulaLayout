@@ -85,8 +85,14 @@ module DviOutHelper =
         s |> String.length |> outNat1
         outStr s
 
+    /// Output 1 `int`.
     let dviout = outNat1
+    /// Output only 1 `DviCmd`.
     let dvicmd (cmd: DviCmd) = cmd |> byte |> outByte
+    /// Output 1 `DviCmd` with 1 `int` arg.
+    let dviCmdArg1 (cmd: DviCmd) arg1 =
+        dvicmd cmd
+        dviout arg1
     
 
 /// Low level DVI instructions output
@@ -96,9 +102,23 @@ module DviOut =
     open TeXFormulaLayout.FontTypes
     open DviOutHelper
 
+    /// Check input char range.
+    let private (|SET_CHAR_i|SET1|INVALID_RANGE|) ch =
+        match ch with
+        // [  0, 128) => SET_CHAR_i
+        | c when 0 <= c && c < 128 -> SET_CHAR_i
+        // [128, 256) => SET1 i
+        | c when 128 <= c && c < 256 -> SET1
+        // (-Inf, 0) && [256, Inf)
+        | _ -> INVALID_RANGE
+
+    /// SetChar1: Typeset 1 character from font,
+    ///     then increase `h` by the width of that character.
     let setChar (ch: CharCode) =
-        if ch < 128 then dvicmd DviCmd.SET1
-        dviout ch
+        match ch with
+        | SET_CHAR_i    -> dviout ch
+        | SET1          -> dviCmdArg1 DviCmd.SET1 ch
+        | INVALID_RANGE -> invalidArg (nameof ch) "Char not in [0, 256)"
 
     let putChar (ch: CharCode) =
         dvicmd DviCmd.PUT1
