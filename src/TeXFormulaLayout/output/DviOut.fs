@@ -75,6 +75,7 @@ module DviOutHelper =
     let outZerosN = outValNTimes 0
 
 
+    /// Output one `Char`
     let outChar (c: Char) =
         // Only accept ASCII [0,256], ignore other Unicode range.
         assert isASCII c
