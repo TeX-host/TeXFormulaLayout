@@ -1,6 +1,7 @@
 namespace TeXFormulaLayout
 
 /// Types for font
+/// (BasicTypes)
 module FontTypes =
     open System
     open TeXFormulaLayout.Distance
@@ -65,3 +66,6 @@ module FontTypes =
         | (_,   FontStyle.S ) -> 7
         | (_,   FontStyle.SS) -> 5
         | _ -> -1
+
+    exception NotImplemented of string
+    exception CannotHappen
