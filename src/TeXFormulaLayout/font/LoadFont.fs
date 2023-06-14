@@ -10,9 +10,15 @@ module LoadFont =
     /// Custom operator for combining paths
     let (+/) path1 path2 = Path.Combine(path1, path2)
 
-    let fontDirPath = AppContext.BaseDirectory +/ "fonts"
+    let fontDirPath =
+        AppContext.BaseDirectory
+        +/ "fonts"
+
     let getFontPath (fontDir) (famliyName: String) (fontSize: FontSize) =
-        let fontName = famliyName + fontSize.ToString("D2")
+        let fontName =
+            famliyName
+            + fontSize.ToString("D2")
+
         fontDir +/ fontName
 
     /// split one line to headChar::tailString
@@ -20,18 +26,21 @@ module LoadFont =
         match line.Length with
         | 0 -> ('\u0000', "") /// TODO: maybe throw an error?
         | 1 -> (line.[0], "")
-        | _ -> (line.[0], line.Substring(1, line.Length-1))
+        | _ -> (line.[0], line.Substring(1, line.Length - 1))
 
     /// count group id to split lines into group
     let countGroupID id line =
         let typ, param = splitLine line
+
         match typ with
         // C: start a new group; E: end all group
-        | 'C' | 'E' -> id + 1
+        | 'C'
+        | 'E' -> id + 1
         // others dosn't change group id
         | _ -> id
 
-    let getDist (fontSize: FontSize) (param: String) =  floatMul (float param) (int32 fontSize)
+    let getDist (fontSize: FontSize) (param: String) = floatMul (float param) (int32 fontSize)
+
     let getOct (param: String) = "0o" + param |> int32
 
     /// read char info from CharInfoList
@@ -39,23 +48,49 @@ module LoadFont =
         let buildChar (font: CharInfo) (s: string) =
             let parseDist = getDist fontSize
             let typ, param = splitLine s
+
             match typ with
-            | 'W' -> {font with width = parseDist param}
-            | 'H' -> {font with height = parseDist param}
-            | 'D' -> {font with depth = parseDist param}
-            | 'I' -> {font with italic = parseDist param}
-            | 'L' -> {font with larger = getOct param |> Some}
-            | 'T' -> {font with varChar = {font.varChar with top = getOct param |> Some}}
-            | 'B' -> {font with varChar = {font.varChar with bot = getOct param |> Some}}
-            | 'R' -> {font with varChar = {font.varChar with rep = getOct param |> Some}}
-            | 'C' | 'E' -> font
+            | 'W' -> { font with width = parseDist param }
+            | 'H' -> { font with height = parseDist param }
+            | 'D' -> { font with depth = parseDist param }
+            | 'I' -> { font with italic = parseDist param }
+            | 'L' -> {
+                font with
+                    larger = getOct param |> Some
+              }
+            | 'T' -> {
+                font with
+                    varChar = {
+                        font.varChar with
+                            top = getOct param |> Some
+                    }
+              }
+            | 'B' -> {
+                font with
+                    varChar = {
+                        font.varChar with
+                            bot = getOct param |> Some
+                    }
+              }
+            | 'R' -> {
+                font with
+                    varChar = {
+                        font.varChar with
+                            rep = getOct param |> Some
+                    }
+              }
+            | 'C'
+            | 'E' -> font
             | _ -> font
 
         // new CharInfo template
         let newCharInfo = {
-            width = Zero; height = Zero; depth = Zero; italic = Zero
+            width = Zero
+            height = Zero
+            depth = Zero
+            italic = Zero
             larger = None
-            varChar = { top = None; bot = None; rep = None; }
+            varChar = { top = None; bot = None; rep = None }
         }
 
         List.fold buildChar newCharInfo lineGroup
@@ -65,7 +100,10 @@ module LoadFont =
     /// TODO: use parser to read real .tfm fonts
     let readFontInfo (fontSize: FontSize) (lines: String list) : Font =
         // ---- tag lines
-        let tags = List.scan countGroupID 0 lines |> List.tail
+        let tags =
+            List.scan countGroupID 0 lines
+            |> List.tail
+
         let tagedTupList = List.zip tags lines
         //printfn "tags = %A" tags
         //printfn "tagedTupList = %A" tagedTupList
@@ -112,7 +150,9 @@ module LoadFont =
 
     let readFontLines (fontSize: FontSize) (fontPath: String) =
         // ---- read all lines
-        let raw_lines = File.ReadLines(fontPath) |> List.ofSeq
+        let raw_lines =
+            File.ReadLines(fontPath)
+            |> List.ofSeq
         // filter out last line ("E")
         let lines = List.filter ((<>) "E") raw_lines
         //printfn "raw_lines = %A" raw_lines
@@ -129,4 +169,4 @@ module LoadFont =
 
     let loadFont (famliyName: String, fontSize: FontSize) : Font =
         getFontPath fontDirPath famliyName fontSize
-            |> (readFontLines fontSize)
+        |> (readFontLines fontSize)

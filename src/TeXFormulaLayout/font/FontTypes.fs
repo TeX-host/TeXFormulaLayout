@@ -7,10 +7,10 @@ module FontTypes =
     open TeXFormulaLayout.Distance
 
     type CharCode = Int32
-    type Delim    = Int32
-    type Penalty  = Int32
-    type Size     = Int32
-    type FontNum  = Int32
+    type Delim = Int32
+    type Penalty = Int32
+    type Size = Int32
+    type FontNum = Int32
     type FontSize = Int32
 
     /// xref: texbook:p199:S546
@@ -35,8 +35,9 @@ module FontTypes =
 
         /// larger version of the same char
         larger: CharCode option
-        varChar: VarCharInfo    /// NOTE: not used, set to None
+        varChar: VarCharInfo /// NOTE: not used, set to None
     }
+
     type Font = CharInfo list
 
     type FontFamily =
@@ -53,18 +54,19 @@ module FontTypes =
         | FontFamily.EX -> "cmex"
         | _ -> ""
 
-    type FontStyle  =
-        | D  = 0
-        | T  = 1
-        | S  = 2
+    type FontStyle =
+        | D = 0
+        | T = 1
+        | S = 2
         | SS = 3
+
     let fontSize (famliy, style) : FontSize =
         match (famliy, style) with
-        | (_,   FontStyle.D ) -> 10
-        | (_,   FontStyle.T ) -> 10
-        | (FontFamily.EX, _ ) -> 10
-        | (_,   FontStyle.S ) -> 7
-        | (_,   FontStyle.SS) -> 5
+        | (_, FontStyle.D) -> 10
+        | (_, FontStyle.T) -> 10
+        | (FontFamily.EX, _) -> 10
+        | (_, FontStyle.S) -> 7
+        | (_, FontStyle.SS) -> 5
         | _ -> -1
 
     exception NotImplemented of string

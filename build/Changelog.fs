@@ -186,10 +186,7 @@ let updateChangelog changelogPath (changelog: Fake.Core.Changelog.Changelog) git
         prereleaseEntries
         |> List.collect (fun entry ->
             entry.Changes
-            |> List.filter (
-                not
-                << isEmptyChange
-            )
+            |> List.filter (not << isEmptyChange)
         )
         |> List.distinct
 
@@ -211,8 +208,7 @@ let updateChangelog changelogPath (changelog: Fake.Core.Changelog.Changelog) git
             changelog.Header,
             changelog.Description,
             None,
-            newEntry
-            :: changelog.Entries
+            newEntry :: changelog.Entries
         )
 
     // latestEntry <- newEntry
@@ -254,10 +250,7 @@ let updateChangelog changelogPath (changelog: Fake.Core.Changelog.Changelog) git
 
     let newLinkReferenceTargets =
         match linkReferenceTargets with
-        | [] -> [
-            linkReferenceForUnreleased
-            linkReferenceForLatestEntry
-          ]
+        | [] -> [ linkReferenceForUnreleased; linkReferenceForLatestEntry ]
         | first :: rest when
             first
             |> String.startsWith "[Unreleased]:"
@@ -280,15 +273,10 @@ let updateChangelog changelogPath (changelog: Fake.Core.Changelog.Changelog) git
         linkReferenceTargets
         |> List.length
 
-    let skipCount =
-        blankLineCount
-        + linkRefCount
+    let skipCount = blankLineCount + linkRefCount
 
     let updatedLines =
-        List.rev (
-            tailLines
-            |> List.skip skipCount
-        )
+        List.rev (tailLines |> List.skip skipCount)
         @ newLinkReferenceTargets
 
     File.write false changelogPath updatedLines

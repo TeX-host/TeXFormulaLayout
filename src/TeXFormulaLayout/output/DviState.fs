@@ -8,55 +8,66 @@ module DviState =
 
     /// Increase the reference value by `n`
     let incRef (n: int) (r: int ref) = r.Value <- r.Value + n
-    let inc = incRef  1
+
+    let inc = incRef 1
     let dec = incRef -1
 
     /// `dvi_h`
     let xMove = ref 0
     let resetX () = xMove := 0
-    let getX   () = !xMove
-    let moveX  dx = incRef dx xMove
+    let getX () = !xMove
+    let moveX dx = incRef dx xMove
 
     /// `dvi_v`
     let yMove = ref 0
     let resetY () = yMove := 0
-    let getY   () = !yMove
-    let moveY  dy = incRef dy yMove
+    let getY () = !yMove
+    let moveY dy = incRef dy yMove
 
-    let NoFont  = -1
+    let NoFont = -1
     /// `dvi_f`
     let actFont = ref NoFont
+
     let resetFont () = actFont := NoFont
+
     let isSameFont f = !actFont = f
-    let setFont    f = actFont := f
+
+    let setFont f = actFont := f
 
     let fontList = ref ([]: FontNum list)
+
     let resetFontList () = fontList := ([]: FontNum list)
+
     let isFontDefinded f = List.exists ((=) f) !fontList
+
     let addFont f = fontList := f :: !fontList
+
     let defindedFonts () = !fontList
 
     /// `total_pages`
     let pageNum = ref 0
-    let actPage  () = !pageNum
+    let actPage () = !pageNum
     let nextPage () = inc pageNum
 
     /// `last_bop`
     let oldPos = ref (-1)
     let newPos = ref (-1)
     let prevPos () = !oldPos
-    let actPos  () = !newPos
+    let actPos () = !newPos
+
     let markPos () =
         oldPos := actPos ()
+
         newPos := outPos ()
 
     /// `curs`
     let ActLevel = ref 0
     let MaxLevel = ref 0
+
     let incLevel () =
         inc ActLevel
-        if !ActLevel > !MaxLevel then inc MaxLevel
-        else ()
+        if !ActLevel > !MaxLevel then inc MaxLevel else ()
+
     let decLevel () = dec ActLevel
     let maxLevel () = !MaxLevel
 
@@ -65,8 +76,13 @@ module DviState =
         resetY ()
         resetFont ()
         resetFontList ()
-        pageNum  := 0
-        oldPos   := -1
-        newPos   := -1
+
+        pageNum := 0
+
+        oldPos := -1
+
+        newPos := -1
+
         ActLevel := 0
+
         MaxLevel := 0

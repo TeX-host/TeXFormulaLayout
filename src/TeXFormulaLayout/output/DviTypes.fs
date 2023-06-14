@@ -111,5 +111,5 @@ type DviCmd =
     /// postamble ending
     | POST_POST = 249
 
-    (*  [250~255] are undefined at the present time  *)
+(*  [250~255] are undefined at the present time  *)
 // end enum DVICommands

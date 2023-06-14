@@ -7,16 +7,19 @@ module Power2Const =
 
     [<Literal>]
     let Two7 = 128
+
     [<Literal>]
     let Two8 = 256
 
     [<Literal>]
     let Two15 = 32768
+
     [<Literal>]
     let Two16 = 65536
 
     [<Literal>]
     let Two23 = 8_388_608
+
     [<Literal>]
     let Two24 = 16_777_216
 
@@ -29,12 +32,14 @@ module Power2Const =
 
 
     let inRange lo hi i = lo <= i && i <= hi
-    let in1ByteRange = inRange 0 (Two8  - 1)
+
+    let in1ByteRange = inRange 0 (Two8 - 1)
     let in2ByteRange = inRange 0 (Two16 - 1)
     let in3ByteRange = inRange 0 (Two24 - 1)
     let in4ByteRange = inRange 0 Int32Max
 
     let inCharRange = in1ByteRange
+
     let isASCII c = c |> int |> inCharRange
 
 
@@ -51,10 +56,12 @@ module DviOutHelper =
     let outNat1 n =
         // NOTE: byte(-1) == byte(255);  byte(256) == byte(0)
         n |> byte |> outByte
+
     /// Output 2 byte.
     let outNat2 n =
         outNat1 (n / Two8)
         outNat1 (n % Two8)
+
     /// Output 3 byte.
     let outNat3 n =
         outNat1 (n / Two16)
@@ -76,7 +83,9 @@ module DviOutHelper =
     let rec outValNTimes value n =
         match n with
         | 0 -> ()
-        | n -> outNat1 value; outValNTimes value (n - 1)
+        | n ->
+            outNat1 value
+            outValNTimes value (n - 1)
 
     /// output N zeros.
     let outZerosN = outValNTimes 0
@@ -86,9 +95,12 @@ module DviOutHelper =
     let outChar (c: Char) =
         // Only accept ASCII [0,256], ignore other Unicode range.
         assert isASCII c
+
         c |> byte |> outByte
+
     /// output string in bytes
     let private outStr = String.iter outChar
+
     /// Output a string with its length. (len[1], str[len])
     let outString s =
         let len = String.length s
@@ -99,24 +111,34 @@ module DviOutHelper =
         outStr s
 
 
-    let private makeNat twoN n =
-        if n >= 0 then n
-        else n + twoN
+    let private makeNat twoN n = if n >= 0 then n else n + twoN
+
     /// Auto choose instruction `DviCmd_i`, with i in [1, 4]
     let outCmdN (cmd: DviCmd) n =
         /// Output DviCmd with offset i
         let cmdN i = outNat1 (i + int cmd)
         // TODO: 使用更精确的范围 [-128, 128)
-        if  abs n >= Two23  then ( cmdN 3;  outNat4 n                 ) else
-        if  abs n >= Two15  then ( cmdN 2;  outNat3 (makeNat Two24 n) ) else
-        if  abs n >= Two7   then ( cmdN 1;  outNat2 (makeNat Two16 n) ) else
-        if      n <> 0      then ( cmdN 0;  outNat1 (makeNat Two8  n) ) else  ()
-        /// 处理 n == 0
+        if abs n >= Two23 then
+            (cmdN 3
+             outNat4 n)
+        else if abs n >= Two15 then
+            (cmdN 2
+             outNat3 (makeNat Two24 n))
+        else if abs n >= Two7 then
+            (cmdN 1
+             outNat2 (makeNat Two16 n))
+        else if n <> 0 then
+            (cmdN 0
+             outNat1 (makeNat Two8 n))
+        else
+            ()
+    /// 处理 n == 0
 
 
     (** -- DVI helper functions -- **)
     /// Output only 1 `DviCmd`.
     let dviCmd (cmd: DviCmd) = cmd |> byte |> outByte
+
     /// Output 1 `DviCmd` with 1 `int` arg.
     let dviCmdArg1 (cmd: DviCmd) arg1 =
         dviCmd cmd
@@ -151,8 +173,8 @@ module DviOut =
     ///     then increase `h` by the width of that character.
     let setChar (ch: CharCode) =
         match ch with
-        | SET_CHAR_i    -> outNat1 ch
-        | SET1          -> dviCmdArg1 DviCmd.SET1 ch
+        | SET_CHAR_i -> outNat1 ch
+        | SET1 -> dviCmdArg1 DviCmd.SET1 ch
         | INVALID_RANGE -> invalidArg (nameof ch) "Char not in [0, 256)"
 
     /// PutChar1, like `SetChar1`, but not move.
@@ -163,6 +185,7 @@ module DviOut =
         dviCmd cmd
         outNat4 a
         outNat4 b
+
     /// Typeset a solid black rectangle of height a and width b,
     ///     with its bottom left corner at (h, v), and move.
     let setRule = rule DviCmd.SET_RULE
@@ -191,6 +214,7 @@ module DviOut =
         outZerosN (4 * 9)
         // p[4]
         outNat4 prevPos
+
     /// End of page.
     let eop () = dviCmd DviCmd.EOP
     /// <summary>
@@ -223,12 +247,14 @@ module DviOut =
         | f when 256 <= f && f <= Int32Max -> FNT_i
         // (-Inf, 0) && [2^32, Inf)
         | _ -> INVALID_FNT
+
     /// Set font `f`
     let font f =
         match f with
         | FNT_NUM -> outNat1 (f + int DviCmd.FNT_NUM_0)
         | FNT_1 -> dviCmdArg1 DviCmd.FNT1 f
-        | FNT_i | INVALID_FNT -> invalidArg (nameof f) "Font number not in [0, 256)"
+        | FNT_i
+        | INVALID_FNT -> invalidArg (nameof f) "Font number not in [0, 256)"
 
     (* Skip `xxx1 ~ xxx4`[239, 242] *)
 
@@ -255,6 +281,7 @@ module DviOut =
 
         /// TODO: 添加字体可用性检查
         let size = int2Dist s
+
         let fileName = cmName fam + string s
 
         dviCmd DviCmd.FNT_DEF_1
@@ -271,22 +298,27 @@ module DviOut =
         // l[1]: name length
         // n[a+l]: font name
         outString fileName
+
     /// Define a list of font k[].
     let rec fontDefs l =
         match l with
-        |   []   -> ()
-        | h :: t -> fontDef h; fontDefs t
+        | [] -> ()
+        | h :: t ->
+            fontDef h
+            fontDefs t
 
 
     (** -- help func for `pre` -- **)
     /// DVI format version (`id_byte` in TeX): i[1]
     let private version () = outNat1 2
+
     /// num[4]/den[4] = 25400000/473628672
     let private numDen () =
         // 254cm * 10e5
         outNat4 25_400_000
         // 7227pt * 2e16sp
         outNat4 473_628_672
+
     /// print banner: k[1], x[k]
     let banner () = outString "Inky's Formula Formatter"
 
@@ -324,7 +356,8 @@ module DviOut =
      *)
     let post mag (pageNum, prevPos, maxLv) =
         let maxVSize = int2Dist 10 * 72
-        let maxWidth = int2Dist  7 * 72
+
+        let maxWidth = int2Dist 7 * 72
 
         dviCmd DviCmd.POST
         outNat4 prevPos

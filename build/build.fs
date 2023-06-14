@@ -13,13 +13,7 @@ open Fake.BuildServer
 
 
 let environVarAsBoolOrDefault varName defaultValue =
-    let truthyConsts = [
-        "1"
-        "Y"
-        "YES"
-        "T"
-        "TRUE"
-    ]
+    let truthyConsts = [ "1"; "Y"; "YES"; "T"; "TRUE" ]
 
     try
         let envvar = (Environment.environVar varName).ToUpper()
@@ -46,12 +40,9 @@ let src =
     </> "src"
 
 let srcCodeGlob =
-    !!(src
-       @@ "**/*.fs")
-    ++ (src
-        @@ "**/*.fsx")
-    -- (src
-        @@ "**/obj/**/*.fs")
+    !!(src @@ "**/*.fs")
+    ++ (src @@ "**/*.fsx")
+    -- (src @@ "**/obj/**/*.fs")
 
 let testsCodeGlob =
     !!(__SOURCE_DIRECTORY__
@@ -64,22 +55,16 @@ let testsCodeGlob =
         </> ".."
         </> "tests/**/obj/**/*.fs")
 
-let srcGlob =
-    src
-    @@ "**/*.??proj"
+let srcGlob = src @@ "**/*.??proj"
 
 let testsGlob =
     __SOURCE_DIRECTORY__
     </> ".."
     </> "tests/**/*.??proj"
 
-let mainApp =
-    src
-    @@ productName
+let mainApp = src @@ productName
 
-let srcAndTest =
-    !!srcGlob
-    ++ testsGlob
+let srcAndTest = !!srcGlob ++ testsGlob
 
 let distDir =
     __SOURCE_DIRECTORY__
@@ -87,20 +72,16 @@ let distDir =
     </> "dist"
 
 let distGlob =
-    !!(distDir
-       @@ "*.zip")
-    ++ (distDir
-        @@ "*.tgz")
-    ++ (distDir
-        @@ "*.tar.gz")
+    !!(distDir @@ "*.zip")
+    ++ (distDir @@ "*.tgz")
+    ++ (distDir @@ "*.tar.gz")
 
 let coverageThresholdPercent = 1
 
 let coverageReportDir =
     __SOURCE_DIRECTORY__
     </> ".."
-    </> "docs"
-        @@ "coverage"
+    </> "docs" @@ "coverage"
 
 let gitOwner = "inkydragon"
 let gitRepoName = "TeXFormulaLayout"
@@ -128,11 +109,7 @@ let targetFramework = "net6.0"
 
 // RuntimeIdentifiers: https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
 // dotnet-packaging Tasks: https://github.com/qmfrederik/dotnet-packaging/blob/0c8e063ada5ba0de2b194cd3fad8308671b48092/Packaging.Targets/build/Packaging.Targets.targets
-let runtimes = [
-    "linux-x64", "CreateTarball"
-    "osx-x64", "CreateTarball"
-    "win-x64", "CreateZip"
-]
+let runtimes = [ "linux-x64", "CreateTarball"; "osx-x64", "CreateTarball"; "win-x64", "CreateZip" ]
 
 let disableCodeCoverage = environVarAsBoolOrDefault "DISABLE_COVERAGE" false
 
@@ -165,10 +142,7 @@ let configuration (targets: Target list) =
     | config -> DotNet.BuildConfiguration.Custom config
 
 let failOnBadExitAndPrint (p: ProcessResult) =
-    if
-        p.ExitCode
-        <> 0
-    then
+    if p.ExitCode <> 0 then
         p.Errors
         |> Seq.iter Trace.traceError
 
@@ -223,25 +197,13 @@ module FSharpAnalyzers =
 //-----------------------------------------------------------------------------
 
 let clean _ =
-    [
-        "bin"
-        "temp"
-        distDir
-        coverageReportDir
-    ]
+    [ "bin"; "temp"; distDir; coverageReportDir ]
     |> Shell.cleanDirs
 
-    !!srcGlob
-    ++ testsGlob
+    !!srcGlob ++ testsGlob
     |> Seq.collect (fun p ->
-        [
-            "bin"
-            "obj"
-        ]
-        |> Seq.map (fun sp ->
-            IO.Path.GetDirectoryName p
-            @@ sp
-        )
+        [ "bin"; "obj" ]
+        |> Seq.map (fun sp -> IO.Path.GetDirectoryName p @@ sp)
     )
     |> Shell.cleanDirs
 
@@ -278,10 +240,7 @@ let deleteChangelogBackupFile _ =
         Shell.rm Changelog.changelogBackupFilename
 
 let dotnetBuild ctx =
-    let args = [
-        sprintf "/p:PackageVersion=%s" latestEntry.NuGetVersion
-        "--no-restore"
-    ]
+    let args = [ sprintf "/p:PackageVersion=%s" latestEntry.NuGetVersion; "--no-restore" ]
 
     DotNet.build
         (fun c -> {
@@ -369,9 +328,7 @@ let generateCoverageReport _ =
 
 let watchApp _ =
 
-    let appArgs =
-        [ "World" ]
-        |> String.concat " "
+    let appArgs = [ "World" ] |> String.concat " "
 
     dotnet.watch
         (fun opt ->
@@ -449,21 +406,15 @@ let generateAssemblyInfo _ =
     |> Seq.map getProjectDetails
     |> Seq.iter (fun (projFileName, _, folderName, attributes) ->
         match projFileName with
-        | Fsproj ->
-            AssemblyInfoFile.createFSharp
-                (folderName
-                 @@ "AssemblyInfo.fs")
-                attributes
+        | Fsproj -> AssemblyInfoFile.createFSharp (folderName @@ "AssemblyInfo.fs") attributes
         | Csproj ->
             AssemblyInfoFile.createCSharp
-                ((folderName
-                  @@ "Properties")
+                ((folderName @@ "Properties")
                  @@ "AssemblyInfo.cs")
                 attributes
         | Vbproj ->
             AssemblyInfoFile.createVisualBasic
-                ((folderName
-                  @@ "My Project")
+                ((folderName @@ "My Project")
                  @@ "AssemblyInfo.vb")
                 attributes
     )
@@ -538,8 +489,7 @@ let githubRelease _ =
         (tagFromVersionNumber latestEntry.NuGetVersion)
         (latestEntry.SemVer.PreRelease
          <> None)
-        (releaseNotes
-         |> Seq.singleton)
+        (releaseNotes |> Seq.singleton)
     |> GitHub.uploadFiles files
     |> GitHub.publishDraft
     |> Async.RunSynchronously
@@ -564,14 +514,10 @@ let initTargets () =
     BuildServer.install [ GitHubActions.Installer ]
 
     /// Defines a dependency - y is dependent on x
-    let (==>!) x y =
-        x ==> y
-        |> ignore
+    let (==>!) x y = x ==> y |> ignore
 
     /// Defines a soft dependency. x must run before y, if it is present, but y does not require x to be run.
-    let (?=>!) x y =
-        x ?=> y
-        |> ignore
+    let (?=>!) x y = x ?=> y |> ignore
     //-----------------------------------------------------------------------------
     // Hide Secrets in Logger
     //-----------------------------------------------------------------------------
@@ -606,11 +552,9 @@ let initTargets () =
 
     // Only call Clean if DotnetPack was in the call chain
     // Ensure Clean is called before DotnetRestore
-    "Clean"
-    ?=>! "DotnetRestore"
+    "Clean" ?=>! "DotnetRestore"
 
-    "Clean"
-    ==>! "CreatePackages"
+    "Clean" ==>! "CreatePackages"
 
     // Only call AssemblyInfo if there is a release target in the call chain
     // Ensure AssemblyInfo is called after DotnetRestore and before DotnetBuild
@@ -620,8 +564,7 @@ let initTargets () =
     "AssemblyInfo"
     ?=>! "DotnetBuild"
 
-    "AssemblyInfo"
-    ==>! "GitRelease"
+    "AssemblyInfo" ==>! "GitRelease"
 
     // Only call UpdateChangelog if there is a release target in the call chain
     // Ensure UpdateChangelog is called after DotnetRestore and before AssemblyInfo

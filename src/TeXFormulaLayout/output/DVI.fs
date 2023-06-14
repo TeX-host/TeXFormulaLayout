@@ -7,41 +7,67 @@ module DVI =
     open TeXFormulaLayout.DviState
 
     let FontDef f =
-        if isFontDefinded f then ()
-        else fontDef f; addFont f
+        if isFontDefinded f then
+            ()
+        else
+            fontDef f
+            addFont f
+
     let Font f =
-        if isSameFont f then ()
-        else FontDef f; font f; setFont f
+        if isSameFont f then
+            ()
+        else
+            FontDef f
+            font f
+            setFont f
 
     let resetMove () =
         resetX ()
         resetY ()
+
     let Move () =
         getX () |> right
+
         getY () |> down
+
         resetMove ()
 
     let DoChar (charFunc: CharCode -> unit) font ch =
         Font font
-        Move ()
+        Move()
         charFunc ch
+
     let SetChar = DoChar setChar
     let PutChar = DoChar putChar
-    let SetRule = Move (); setRule
-    let PutRule = Move (); putRule
 
-    let Right dx = moveX  dx
-    let Left  dx = moveX -dx
-    let Down  dy = moveY  dy
-    let Up    dy = moveY -dy
+    let SetRule =
+        Move()
+        setRule
 
-    let Push () =      Move (); push (); incLevel ()
-    let Pop  () = resetMove (); pop  (); decLevel ()
+    let PutRule =
+        Move()
+        putRule
+
+    let Right dx = moveX dx
+    let Left dx = moveX -dx
+    let Down dy = moveY dy
+    let Up dy = moveY -dy
+
+    let Push () =
+        Move()
+        push ()
+        incLevel ()
+
+    let Pop () =
+        resetMove ()
+        pop ()
+        decLevel ()
 
     let Bop () =
         markPos ()
         nextPage ()
         bop (actPage ()) (prevPos ())
+
     let Eop () =
         resetMove ()
         resetFont ()
@@ -50,6 +76,7 @@ module DVI =
     let Pre mag =
         initDviState ()
         pre mag
+
     let Post mag =
         markPos ()
         post mag (actPage (), prevPos (), maxLevel ())

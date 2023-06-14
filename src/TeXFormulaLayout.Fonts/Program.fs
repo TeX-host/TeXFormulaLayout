@@ -1,11 +1,11 @@
 // Learn more about F# at http://docs.microsoft.com/dotnet/fsharp
 namespace TeXFormulaLayout
+
 open System
 
 module Fonts =
     // Define a function to construct a message to print
-    let from whom =
-        sprintf "from %s" whom
+    let from whom = sprintf "from %s" whom
 
     [<EntryPoint>]
     let main argv =

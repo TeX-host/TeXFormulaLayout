@@ -43,9 +43,7 @@ module AssemblyInfo =
 module Say =
     open System
 
-    let nothing name =
-        name
-        |> ignore
+    let nothing name = name |> ignore
 
     let hello name = sprintf "Hello %s" name
 
@@ -89,7 +87,7 @@ module Main =
                 Say.hello v
                 |> Say.colorizeIn color
 
-                LoadFont.loadFont("TS", 10)
+                LoadFont.loadFont ("TS", 10)
                 |> ignore
 
                 ()
