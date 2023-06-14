@@ -105,7 +105,12 @@ module DviOut =
                 endMemDvi ()
             }
 
-            test "dvicmd" {
+            test "outCmdN" {
+                startMemDvi ()
+                endMemDvi ()
+            }
+
+            test "dviCmd" {
                 startMemDvi ()
                 dviCmd DviCmd.SET_CHAR_0
                 Expect.equal (getMemByteArray ()) [| 0uy |] "[0]"
