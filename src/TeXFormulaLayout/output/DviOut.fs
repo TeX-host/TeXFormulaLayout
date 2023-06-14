@@ -59,6 +59,13 @@ module DviOutHelper =
     let outNat3 n =
         outNat1 (n / Two16)
         outNat2 (n % Two16)
+    (**  [tex#600]
+        assert abs n >= 2^23:
+        dviout( x >> 24);
+        dviout((x >> 16) & 255);
+        dviout((x >>  8) & 255);
+        dviout( x        & 255);
+     *)
     /// Output 4 byte.
     let outNat4 n =
         outNat1 (n / Two24)
