@@ -194,24 +194,47 @@ module DviOut =
 
     // TODO: distInt
     let int2Dist = id
+    (* [tex#588p218]
+        fnt_defi (1 <= i <= 4); k[i], c[4], s[4], d[4], a[1], l[1], n[a+l]
+
+                  1,2,3,4 ubytes    TeXfontnumber for FNTDEF1 .. FNTDEF4
+                        4 ubytes    checksum
+                        4 ubytes    scale
+                        4 ubytes    design size
+                        1 byte      deflen1
+                        1 byte      deflen2
+        deflen1 + deflen2 bytes     fontname.
+
+        xref: DVI.format
+    *)
+    /// Define font k.
     let fontDef nr =
+        /// TODO: global var
         let famSizeVector = []
         let (fam, s) = famSizeVector.[nr]
 
+        /// TODO: 添加字体可用性检查
         let size = int2Dist s
         let fileName = cmName fam + string s
 
         dvicmd DviCmd.FNT_DEF_1
+        // k[1]: font number
         dviout nr
+        // c[4]: checksum
         out2Zero 4
+        // s[4]: scale
         outNat4 size
+        // d[4]: design size
         outNat4 size
+        // a[1]: deflen1
         out2Zero 1
+        // l[1]: name length
+        // n[a+l]: font name
         outString fileName
-
+    /// Define a list of font k[].
     let rec fontDefs l =
         match l with
-        | [] -> ()
+        |   []   -> ()
         | h :: t -> fontDef h; fontDefs t
 
 
