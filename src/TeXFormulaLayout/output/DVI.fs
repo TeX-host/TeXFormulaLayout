@@ -52,7 +52,7 @@ module DVI =
         pre mag
     let Post mag =
         markPos ()
-        post mag (actPage ()) (prevPos ()) (maxLevel ())
+        post mag (actPage (), prevPos (), maxLevel ())
         fontDefs (defindedFonts ())
         postpost (actPos ())
         markPos ()

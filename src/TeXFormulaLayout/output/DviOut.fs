@@ -269,13 +269,20 @@ module DviOut =
         outNat4 mag
         banner ()
 
+    (* [tex#590p219]  POST: p[4], num[4], den[4], mag[4], l[4], u[4], s[2], t[2];
 
-    let rec trailer n =
-        match n with
-        | 0 -> ()
-        | _ -> dviout 223; trailer (n - 1)
+        last_page_offset   4 sbytes    (offset in file where last page starts)
+        numerator          4 ubytes    (numerater must equal the one in preamble)
+        denominator        4 ubytes    (denominator must equal the one in preamble)
+        magnification      4 ubytes    (magnification must equal the one in preamble)
+        max_page_height    4 ubytes    (maximum page height)
+        max_page_width     4 ubytes    (maximum page width)
+        max_stack          2 ubytes    (maximum stack depth needed)
+        total_pages        2 ubytes    (number of pages in file)
 
-    let post mag pageNum prevPos maxLv =
+        xref: DVI.format
+     *)
+    let post mag (pageNum, prevPos, maxLv) =
         let maxVSize = int2Dist 10 * 72
         let maxWidth = int2Dist  7 * 72
 
@@ -288,6 +295,10 @@ module DviOut =
         outNat2 maxLv
         outNat2 pageNum
 
+    let rec trailer n =
+        match n with
+        | 0 -> ()
+        | _ -> dviout 223; trailer (n - 1)
     let postpost postPos =
         dvicmd DviCmd.POST_POST
         outNat4 postPos
