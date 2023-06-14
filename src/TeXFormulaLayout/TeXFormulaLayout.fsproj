@@ -20,6 +20,10 @@
         <Compile Include="font\FontTypes.fs" />
         <Compile Include="output\DviTypes.fs" />
 
+        <Compile Include="BoxTypes.fs" />
+        <Compile Include="math\MathTypes.fs" />
+        <Compile Include="math\EquInput.fs" />
+        
         <!-- Deps to clr -->
         <Compile Include="output\BytesOut.fs" />
 
