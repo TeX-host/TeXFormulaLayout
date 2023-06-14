@@ -6,7 +6,8 @@ module DviState =
     open TeXFormulaLayout.FontTypes
     open TeXFormulaLayout.BytesOut
 
-    let incRef (n: Int32) (r: Int32 ref) = r := !r + n
+    /// Increase the reference value by `n`
+    let incRef (n: int) (r: int ref) = r.Value <- r.Value + n
     let inc = incRef  1
     let dec = incRef -1
 
