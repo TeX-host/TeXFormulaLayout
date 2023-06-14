@@ -81,9 +81,15 @@ module DviOutHelper =
         c |> byte |> outByte
     /// output string in bytes
     let private outStr = String.iter outChar
+    /// Output a string with its length. (len[1], str[len])
     let outString s =
-        s |> String.length |> outNat1
+        let len = String.length s
+        assert in1ByteRange len
+        // output string length
+        outNat1 len
+        // output raw string
         outStr s
+
 
     /// Output 1 `int`.
     let dviout = outNat1
