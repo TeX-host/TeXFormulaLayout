@@ -320,4 +320,4 @@ module DviOut =
         trailer 3
 
     /// At least out one 233, Make final ownPos is a multiple of four bytes
-    let rec tail ownPos = trailer (4 - ownPos % 4)
+    let rec tailFill ownPos = trailer (4 - ownPos % 4)

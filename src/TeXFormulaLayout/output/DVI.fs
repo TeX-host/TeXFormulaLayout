@@ -56,4 +56,4 @@ module DVI =
         fontDefs (defindedFonts ())
         postpost (actPos ())
         markPos ()
-        tail (actPage ())
+        tailFill (actPage ())
