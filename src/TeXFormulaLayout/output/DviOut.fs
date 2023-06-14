@@ -120,9 +120,8 @@ module DviOut =
         | SET1          -> dviCmdArg1 DviCmd.SET1 ch
         | INVALID_RANGE -> invalidArg (nameof ch) "Char not in [0, 256)"
 
-    let putChar (ch: CharCode) =
-        dvicmd DviCmd.PUT1
-        dviout ch
+    /// PutChar1, like `SetChar1`, but not move.
+    let putChar = dviCmdArg1 DviCmd.PUT1
 
     let rule cmd (a: Dist) (b: Dist) =
         dvicmd cmd
