@@ -135,11 +135,38 @@ module DviOut =
     ///     with its bottom left corner at (h, v), but not move.
     let putRule = rule DviCmd.PUT_RULE
 
+    (**
+        begin_of_page      1 ubyte     (BOP)
+        page_nr            4 sbytes    (page number)
+        do_be_do          36 bytes     (filler ????)
+        prev_page_offset   4 sbytes    (offset in file where previous page starts, -1 for none)
+
+        xref: DVI.format
+     **)
+    /// Beginning of a page.
+    let bop pageNum prevPos =
+        // TODO: clear state, ref [tex82+p215]
+        dvicmd DviCmd.BOP
+        // c0[4]
+        outNat4 pageNum
+        // c1[4] ~ c9[4]
+        out2Zero (4 * 9)
+        // p[4]
+        outNat4 prevPos
+    /// End of page.
+    let eop () = dvicmd DviCmd.EOP
+    /// <summary>
+    /// Push the current state (h, v, w, x, y, z) onto the top of the stack;
+    ///     without change any of these values.
+    /// </summary>
+    /// Note that f is not pushed.
+    let push () = dvicmd DviCmd.PUSH
+    /// Pop the top state off of the stack and re-assign them.
+    let pop () = dvicmd DviCmd.POP
+
+
     let down = outCmdN DviCmd.DOWN1
     let right = outCmdN DviCmd.RIGHT1
-
-    let push () = dvicmd DviCmd.PUSH
-    let pop () = dvicmd DviCmd.POP
 
     let font f = (f + int32 DviCmd.FNT_NUM_0) |> dviout
 
@@ -165,13 +192,7 @@ module DviOut =
         | [] -> ()
         | h :: t -> fontDef h; fontDefs t
 
-    let bop pageNum prevPos =
-        dvicmd DviCmd.BOP
-        outNat4 pageNum
-        out2Zero 36
-        outNat4 prevPos
 
-    let eop () = dvicmd DviCmd.EOP
     let version () = outNat1 2
     let numDen () =
         outNat4 25400000
