@@ -295,14 +295,29 @@ module DviOut =
         outNat2 maxLv
         outNat2 pageNum
 
-    let rec trailer n =
+
+    (** -- help func for `postpost` -- **)
+    /// Output N 233
+    let rec private trailer n =
         match n with
         | 0 -> ()
         | _ -> dviout 223; trailer (n - 1)
+    (* [tex-p220#590]  post_post; q[4], i[1]; 223's
+
+        postamble_offset   4 sbytes    (offset in file where postamble starts)
+        version_id         1 ubyte     (should be version 2)
+        trailer         >= 4 ubytes    (TRAILER)
+
+        xref: DVI.format
+     *)
+    /// signifies the end of the font definitions
     let postpost postPos =
         dvicmd DviCmd.POST_POST
+        // a pointer to the post command that started the postamble
         outNat4 postPos
         version ()
+        // NOTE: output more 233 in `tail`
         trailer 3
 
+    /// At least out one 233, Make final ownPos is a multiple of four bytes
     let rec tail ownPos = trailer (4 - ownPos % 4)
