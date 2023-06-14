@@ -75,10 +75,10 @@ module DviOutHelper =
 
 
     /// output N zeros.
-    let rec out2Zero n =
+    let rec outZerosN n =
         match n with
         | 0 -> ()
-        | n -> outNat1 0; out2Zero (n - 1)
+        | n -> outNat1 0; outZerosN (n - 1)
 
     let outChar (c: Char) =
         // Only accept ASCII [0,256], ignore other Unicode range.
@@ -155,7 +155,7 @@ module DviOut =
         // c0[4]
         outNat4 pageNum
         // c1[4] ~ c9[4]
-        out2Zero (4 * 9)
+        outZerosN (4 * 9)
         // p[4]
         outNat4 prevPos
     /// End of page.
@@ -221,13 +221,13 @@ module DviOut =
         // k[1]: font number
         dviout nr
         // c[4]: checksum
-        out2Zero 4
+        outZerosN 4
         // s[4]: scale
         outNat4 size
         // d[4]: design size
         outNat4 size
         // a[1]: deflen1
-        out2Zero 1
+        outZerosN 1
         // l[1]: name length
         // n[a+l]: font name
         outString fileName
