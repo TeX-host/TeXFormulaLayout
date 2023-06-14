@@ -12,11 +12,11 @@ module BytesOut =
     /// Hold `BinaryWriter` ref
     let binWriter : BinaryWriter option ref = ref None
     let getStream () =
-        match !binWriter with
+        match binWriter.Value with
         | None    -> raise NoBinaryOutException
         | Some bw -> bw
     let private closeStream () =
-        match !binWriter with
+        match binWriter.Value with
         | None    -> ()
         | Some bw -> bw.Close()
 
@@ -24,11 +24,11 @@ module BytesOut =
     let startDviOut fileName =
         closeStream ()
         let fs = File.Open(fileName, FileMode.Create)
-        binWriter := new BinaryWriter(fs) |> Some
+        binWriter.Value <- new BinaryWriter(fs) |> Some
     /// Close file.
     let endDviOut () =
         closeStream ()
-        binWriter := None
+        binWriter.Value <- None
 
 
     /// Output one byte.
