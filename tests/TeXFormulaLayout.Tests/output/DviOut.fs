@@ -121,3 +121,19 @@ module DviOutHelperTests =
                 endMemDvi ()
             }
         ] |> testSequenced
+
+
+module DviOutTests =
+    open TeXFormulaLayout.Tests.BytesOut
+    open TeXFormulaLayout.DviOut
+
+    [<Tests>]
+    let tests =
+        testList "DviOut" [
+
+            test "setChar" {
+                startMemDvi ()
+                endMemDvi ()
+            }
+
+        ] |> testSequenced
