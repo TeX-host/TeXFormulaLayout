@@ -164,6 +164,9 @@ module DviOut =
     ///     with its bottom left corner at (h, v), but not move.
     let putRule = rule DviCmd.PUT_RULE
 
+
+    /// No operation, do nothing.
+    let nop () = dviCmd DviCmd.NOP
     (**
         begin_of_page      1 ubyte     (BOP)
         page_nr            4 sbytes    (page number)
