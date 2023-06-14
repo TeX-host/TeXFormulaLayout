@@ -118,10 +118,10 @@ module DviOutHelper =
     /// Output 1 `int`.
     let dviout = outNat1
     /// Output only 1 `DviCmd`.
-    let dvicmd (cmd: DviCmd) = cmd |> byte |> outByte
+    let dviCmd (cmd: DviCmd) = cmd |> byte |> outByte
     /// Output 1 `DviCmd` with 1 `int` arg.
     let dviCmdArg1 (cmd: DviCmd) arg1 =
-        dvicmd cmd
+        dviCmd cmd
         dviout arg1
 
 
@@ -156,7 +156,7 @@ module DviOut =
 
 
     let private rule cmd (a: Dist) (b: Dist) =
-        dvicmd cmd
+        dviCmd cmd
         outNat4 a
         outNat4 b
     /// Typeset a solid black rectangle of height a and width b,
@@ -177,7 +177,7 @@ module DviOut =
     /// Beginning of a page.
     let bop pageNum prevPos =
         // TODO: clear state, ref [tex82+p215]
-        dvicmd DviCmd.BOP
+        dviCmd DviCmd.BOP
         // c0[4]
         outNat4 pageNum
         // c1[4] ~ c9[4]
@@ -185,15 +185,15 @@ module DviOut =
         // p[4]
         outNat4 prevPos
     /// End of page.
-    let eop () = dvicmd DviCmd.EOP
+    let eop () = dviCmd DviCmd.EOP
     /// <summary>
     /// Push the current state (h, v, w, x, y, z) onto the top of the stack;
     ///     without change any of these values.
     /// </summary>
     /// Note that f is not pushed.
-    let push () = dvicmd DviCmd.PUSH
+    let push () = dviCmd DviCmd.PUSH
     /// Pop the top state off of the stack and re-assign them.
-    let pop () = dvicmd DviCmd.POP
+    let pop () = dviCmd DviCmd.POP
 
     /// Move right b[1..4] units., Set h ← h+b
     let right = outCmdN DviCmd.RIGHT1
@@ -243,7 +243,7 @@ module DviOut =
         let size = int2Dist s
         let fileName = cmName fam + string s
 
-        dvicmd DviCmd.FNT_DEF_1
+        dviCmd DviCmd.FNT_DEF_1
         // k[1]: font number
         dviout nr
         // c[4]: checksum
@@ -289,7 +289,7 @@ module DviOut =
      *)
     /// preamble
     let pre mag =
-        dvicmd DviCmd.PRE
+        dviCmd DviCmd.PRE
         version ()
         numDen ()
         outNat4 mag
@@ -312,7 +312,7 @@ module DviOut =
         let maxVSize = int2Dist 10 * 72
         let maxWidth = int2Dist  7 * 72
 
-        dvicmd DviCmd.POST
+        dviCmd DviCmd.POST
         outNat4 prevPos
         numDen ()
         outNat4 mag
@@ -335,7 +335,7 @@ module DviOut =
      *)
     /// signifies the end of the font definitions
     let postpost postPos =
-        dvicmd DviCmd.POST_POST
+        dviCmd DviCmd.POST_POST
         // a pointer to the post command that started the postamble
         outNat4 postPos
         version ()

@@ -107,11 +107,11 @@ module DviOut =
 
             test "dvicmd" {
                 startMemDvi ()
-                dvicmd DviCmd.SET_CHAR_0
+                dviCmd DviCmd.SET_CHAR_0
                 Expect.equal (getMemByteArray ()) [| 0uy |] "[0]"
 
                 startMemDvi ()
-                dvicmd DviCmd.POST_POST
+                dviCmd DviCmd.POST_POST
                 Expect.equal (getMemByteArray ()) [| 249uy |] "[249]"
                 endMemDvi ()
             }
