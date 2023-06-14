@@ -25,7 +25,7 @@ module BytesOut =
 
     /// <summary>Open file for output.</summary>
     /// <param name="fileName">Output filename</param>
-    let startDviOut fileName =
+    let startOut fileName =
         closeStream ()
         let fs = File.Open(fileName, FileMode.Create)
         gBinaryWriterRef.Value <- new BinaryWriter(fs) |> Some
