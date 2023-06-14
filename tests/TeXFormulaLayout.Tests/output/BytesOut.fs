@@ -10,13 +10,17 @@ let getMemByteArray () =
     let mem = !memStream |> Option.get
     mem.ToArray()
 
+/// [TestOnly] Use `MemoryStream` as DVI file.
 let startMemDvi () =
-    match !gBinaryWriterRef with
+    // Close old Stream
+    match gBinaryWriterRef.Value with
     | None    -> ()
     | Some bw -> bw.Close()
+    // Set new Stream
     let mem = new MemoryStream()
-    memStream := Some mem
-    gBinaryWriterRef := new BinaryWriter(mem) |> Some
+    memStream.Value <- Some mem
+    gBinaryWriterRef.Value <- new BinaryWriter(mem) |> Some
+/// [TestOnly] Close `MemoryStream`.
 let endMemDvi = endOut
 
 
