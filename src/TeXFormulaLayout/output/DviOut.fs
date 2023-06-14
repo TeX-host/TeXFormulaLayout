@@ -62,7 +62,7 @@ module DviOutHelper =
         if n >= 0 then n
         else n + twoN
 
-    let outCmdN (cmd: DVICmd) n =
+    let outCmdN (cmd: DviCmd) n =
         let cmdN (l: Int32) = outNat1 (l + int32 cmd)
         if  abs n >= Two23  then ( cmdN 3;  outNat4 n                 ) else
         if  abs n >= Two15  then ( cmdN 2;  outNat3 (makeNat Two24 n) ) else
@@ -86,7 +86,7 @@ module DviOutHelper =
         outStr s
 
     let dviout = outNat1
-    let dvicmd (cmd: DVICmd) = cmd |> byte |> outByte
+    let dvicmd (cmd: DviCmd) = cmd |> byte |> outByte
     
 
 /// Low level DVI instructions output
@@ -97,11 +97,11 @@ module DviOut =
     open DviOutHelper
 
     let setChar (ch: CharCode) =
-        if ch < 128 then dvicmd DVICmd.SET1
+        if ch < 128 then dvicmd DviCmd.SET1
         dviout ch
 
     let putChar (ch: CharCode) =
-        dvicmd DVICmd.PUT1
+        dvicmd DviCmd.PUT1
         dviout ch
 
     let rule cmd (a: Dist) (b: Dist) =
@@ -109,16 +109,16 @@ module DviOut =
         outNat1 a
         outNat1 b
 
-    let setRule = rule DVICmd.SET_RULE
-    let putRule = rule DVICmd.PUT_RULE
+    let setRule = rule DviCmd.SET_RULE
+    let putRule = rule DviCmd.PUT_RULE
 
-    let down = outCmdN DVICmd.DOWN1
-    let right = outCmdN DVICmd.RIGHT1
+    let down = outCmdN DviCmd.DOWN1
+    let right = outCmdN DviCmd.RIGHT1
 
-    let push () = dvicmd DVICmd.PUSH
-    let pop () = dvicmd DVICmd.POP
+    let push () = dvicmd DviCmd.PUSH
+    let pop () = dvicmd DviCmd.POP
 
-    let font f = (f + int32 DVICmd.FNT_NUM_0) |> dviout
+    let font f = (f + int32 DviCmd.FNT_NUM_0) |> dviout
 
     // TODO: distInt
     let int2Dist = id
@@ -129,7 +129,7 @@ module DviOut =
         let size = int2Dist s
         let fileName = cmName fam + string s
 
-        dvicmd DVICmd.FNT_DEF_1
+        dvicmd DviCmd.FNT_DEF_1
         dviout nr
         out2Zero 4
         outNat4 size
@@ -143,12 +143,12 @@ module DviOut =
         | h :: t -> fontDef h; fontDefs t
 
     let bop pageNum prevPos =
-        dvicmd DVICmd.BOP
+        dvicmd DviCmd.BOP
         outNat4 pageNum
         out2Zero 36
         outNat4 prevPos
 
-    let eop () = dvicmd DVICmd.EOP
+    let eop () = dvicmd DviCmd.EOP
     let version () = outNat1 2
     let numDen () =
         outNat4 25400000
@@ -156,7 +156,7 @@ module DviOut =
     let banner () = outString "Inky's Formula Formatter"
 
     let pre mag =
-        dvicmd DVICmd.PRE
+        dvicmd DviCmd.PRE
         version ()
         numDen ()
         outNat4 mag
@@ -171,7 +171,7 @@ module DviOut =
         let maxVSize = int2Dist 10 * 72
         let maxWidth = int2Dist  7 * 72
 
-        dvicmd DVICmd.POST
+        dvicmd DviCmd.POST
         outNat4 prevPos
         numDen ()
         outNat4 mag
@@ -181,7 +181,7 @@ module DviOut =
         outNat2 pageNum
 
     let postpost postPos =
-        dvicmd DVICmd.POST_POST
+        dvicmd DviCmd.POST_POST
         outNat4 postPos
         version ()
         trailer 3

@@ -4,7 +4,7 @@ namespace TeXFormulaLayout
 module DviTypes =
     /// [p215#585]
     /// a list of all the commands that may appear in a DVI file.
-    type DVICmd =
+    type DviCmd =
         /// typeset character 0 and move right
         | SET_CHAR_0 = 0
         (*  EMIT SET_CHAR_[1~126]  *)
