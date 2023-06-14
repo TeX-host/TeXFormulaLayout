@@ -5,22 +5,26 @@ module BytesOut =
     open System
     open System.IO
 
-    /// Types
+    /// Uninitialized global output stream
     exception NoBinaryOutException
 
 
-    /// Hold `BinaryWriter` ref
+    /// Hold ref to global output stream (`BinaryWriter`).
     let binWriter : BinaryWriter option ref = ref None
+
+    /// Get global output stream.
     let getStream () =
         match binWriter.Value with
         | None    -> raise NoBinaryOutException
         | Some bw -> bw
+    /// Close global output stream.
     let private closeStream () =
         match binWriter.Value with
         | None    -> ()
         | Some bw -> bw.Close()
 
-    /// Open file for output.
+    /// <summary>Open file for output.</summary>
+    /// <param name="fileName">Output filename</param>
     let startDviOut fileName =
         closeStream ()
         let fs = File.Open(fileName, FileMode.Create)
