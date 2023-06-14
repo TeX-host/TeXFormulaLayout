@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <OutputType>Exe</OutputType>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     </PropertyGroup>
     <PropertyGroup>
         <Title>TeXFormulaLayout</Title>
@@ -18,7 +19,7 @@
         <Compile Include="math\Distance.fs" />
         <Compile Include="font\FontTypes.fs" />
         <Compile Include="output\DviTypes.fs" />
-        
+
         <!-- Deps to clr -->
         <Compile Include="output\BytesOut.fs" />
 

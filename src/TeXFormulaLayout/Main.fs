@@ -28,11 +28,11 @@ module AssemblyInfo =
 
     let assembly = lazy (Assembly.GetEntryAssembly())
 
-    let printVersion() =
+    let printVersion () =
         let version = assembly.Force().GetName().Version
         printfn "%A" version
 
-    let printInfo() =
+    let printInfo () =
         let assembly = assembly.Force()
         let name = assembly.GetName()
         let version = assembly.GetName().Version
@@ -43,11 +43,13 @@ module AssemblyInfo =
 module Say =
     open System
 
-    let nothing name = name |> ignore
+    let nothing name =
+        name
+        |> ignore
 
     let hello name = sprintf "Hello %s" name
 
-    let colorizeIn color str =
+    let colorizeIn (color: string) str =
         let oldColor = Console.ForegroundColor
         Console.ForegroundColor <- (Enum.Parse(typedefof<ConsoleColor>, color) :?> ConsoleColor)
         printfn "%s" str
@@ -61,6 +63,7 @@ module Main =
         | Version
         | Favorite_Color of string // Look in App.config
         | [<MainCommand>] Hello of string
+
         interface IArgParserTemplate with
             member s.Usage =
                 match s with
@@ -73,18 +76,28 @@ module Main =
     let main (argv: string array) =
         let parser = ArgumentParser.Create<CLIArguments>(programName = "TeXFormulaLayout")
         let results = parser.Parse(argv)
+
         if results.Contains Version then
-            AssemblyInfo.printVersion()
+            AssemblyInfo.printVersion ()
         elif results.Contains Info then
-            AssemblyInfo.printInfo()
+            AssemblyInfo.printInfo ()
         elif results.Contains Hello then
             match results.TryGetResult Hello with
             | Some v ->
                 let color = results.GetResult Favorite_Color
-                Say.hello v |> Say.colorizeIn color
-                LoadFont.loadFont("TS", 10) |> ignore
+
+                Say.hello v
+                |> Say.colorizeIn color
+
+                LoadFont.loadFont("TS", 10)
+                |> ignore
+
                 ()
-            | None -> parser.PrintUsage() |> printfn "%s"
+            | None ->
+                parser.PrintUsage()
+                |> printfn "%s"
         else
-            parser.PrintUsage() |> printfn "%s"
+            parser.PrintUsage()
+            |> printfn "%s"
+
         0
