@@ -123,12 +123,16 @@ module DviOut =
     /// PutChar1, like `SetChar1`, but not move.
     let putChar = dviCmdArg1 DviCmd.PUT1
 
-    let rule cmd (a: Dist) (b: Dist) =
-        dvicmd cmd
-        outNat1 a
-        outNat1 b
 
+    let private rule cmd (a: Dist) (b: Dist) =
+        dvicmd cmd
+        outNat4 a
+        outNat4 b
+    /// Typeset a solid black rectangle of height a and width b,
+    ///     with its bottom left corner at (h, v), and move.
     let setRule = rule DviCmd.SET_RULE
+    /// Typeset a solid black rectangle of height a and width b,
+    ///     with its bottom left corner at (h, v), but not move.
     let putRule = rule DviCmd.PUT_RULE
 
     let down = outCmdN DviCmd.DOWN1
