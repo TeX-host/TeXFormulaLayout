@@ -371,7 +371,7 @@ module DviOut =
 
     (** -- help func for `postpost` -- **)
     /// Output N 233
-    let private trailer n = outValNTimes 233
+    let private trailer = outValNTimes 233
     (* [tex-p220#590]  post_post; q[4], i[1]; 223's
 
         postamble_offset   4 sbytes    (offset in file where postamble starts)
