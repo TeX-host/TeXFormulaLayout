@@ -75,7 +75,7 @@ module DviOut =
                 endMemDvi ()
             }
 
-            test "out2Zero" {
+            test "outZerosN" {
                 startMemDvi ()
                 outZerosN 0
                 Expect.equal (getMemByteArray ()) [| |] "[]"
