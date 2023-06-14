@@ -24,7 +24,7 @@ module Power2ConstTests =
         }
     ]
 
-module DviOut =
+module DviOutHelperTests =
     open TeXFormulaLayout.Tests.BytesOut
     open TeXFormulaLayout.DviOutHelper
     open TeXFormulaLayout.DviTypes
