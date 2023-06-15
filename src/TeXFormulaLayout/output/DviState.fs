@@ -7,10 +7,9 @@ module DviState =
     open TeXFormulaLayout.BytesOut
 
     /// Increase the reference value by `n`
-    let incRef (n: int) (r: int ref) = r.Value <- r.Value + n
-
-    let inc = incRef 1
-    let dec = incRef -1
+    let private incRef (n: int) (r: int ref) = r.Value <- r.Value + n
+    let private inc = incRef 1
+    let private dec = incRef -1
 
     /// `dvi_h`:  horizontal coordinates, from top left -> right.
     let xMove = ref 0
