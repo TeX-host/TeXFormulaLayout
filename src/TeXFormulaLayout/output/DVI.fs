@@ -6,6 +6,7 @@ module DVI =
     open TeXFormulaLayout.DviOut
     open TeXFormulaLayout.DviState
 
+    /// Define font.
     let FontDef f =
         if isFontDefinded f then
             ()
@@ -13,6 +14,7 @@ module DVI =
             fontDef f
             addFont f
 
+    /// Define and set font.
     let Font f =
         if isSameFont f then
             ()
@@ -21,10 +23,12 @@ module DVI =
             font f
             setFont f
 
+    /// Reset (h, v) to Top left (0, 0)
     let resetMove () =
         resetX ()
         resetY ()
 
+    /// Move a step (h, v), and reset it.
     let Move () =
         getX () |> right
 
