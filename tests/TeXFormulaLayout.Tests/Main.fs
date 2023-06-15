@@ -58,13 +58,14 @@ module ExpectoTemplate =
         endOut ()
 
     open LoadFont
+
     let writeDviHello () =
         startOut "hello.dvi"
         let mag = 2000
         Pre mag
         Bop()
         let f = loadFont ("RM", 10)
-        SetChar (0, int 'H')
+        SetChar(0, int 'H')
         Eop()
         Post mag
         endOut ()
