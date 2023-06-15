@@ -46,11 +46,20 @@ module FontTypes =
 
     type Font = CharInfo list
 
+
+    /// Actually corresponds to font name
     type FontFamily =
-        | RM = 0
-        | MI = 1
-        | SY = 2
-        | EX = 3
+        | RM
+        | MI 
+        | SY
+        | EX
+
+    let fontFamilyIdx fontType =
+        match fontType with
+        | FontFamily.RM -> 0
+        | FontFamily.MI -> 1
+        | FontFamily.SY -> 2
+        | FontFamily.EX -> 3
 
     let cmName (cm: FontFamily) =
         match cm with
@@ -58,7 +67,6 @@ module FontTypes =
         | FontFamily.MI -> "cmmi"
         | FontFamily.SY -> "cmsy"
         | FontFamily.EX -> "cmex"
-        | _ -> ""
 
     type FontStyle =
         | D = 0
