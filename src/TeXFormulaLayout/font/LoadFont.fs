@@ -14,7 +14,7 @@ module LoadFont =
         AppContext.BaseDirectory
         +/ "fonts"
 
-    let getFontPath (fontDir) (famliyName: String) (fontSize: FontSize) =
+    let getFontPath (fontDir) (famliyName) (fontSize: FontSize) =
         let fontName =
             famliyName
             + fontSize.ToString("D2")
@@ -167,6 +167,6 @@ module LoadFont =
 
         readFontInfo fontSize lines
 
-    let loadFont (famliyName: String, fontSize: FontSize) : Font =
-        getFontPath fontDirPath famliyName fontSize
+    let loadFont (famliyName: FontFamily, fontSize) : Font =
+        getFontPath fontDirPath (string famliyName) fontSize
         |> (readFontLines fontSize)

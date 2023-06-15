@@ -87,9 +87,6 @@ module Main =
                 Say.hello v
                 |> Say.colorizeIn color
 
-                LoadFont.loadFont ("TS", 10)
-                |> ignore
-
                 ()
             | None ->
                 parser.PrintUsage()
