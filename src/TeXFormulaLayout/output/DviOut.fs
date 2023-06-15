@@ -354,19 +354,18 @@ module DviOut =
 
         xref: DVI.format
      *)
-    let post mag (pageNum, prevPos, maxLv) =
-        let maxVSize = int2Dist 10 * 72
-
-        let maxWidth = int2Dist 7 * 72
+    let post mag (totalPagesNum, prevPos, maxStackDepth) =
+        let maxVerticalHeight = int2Dist 10 * 72
+        let maxHorizonWidth = int2Dist 7 * 72
 
         dviCmd DviCmd.POST
         outNat4 prevPos
         numDen ()
         outNat4 mag
-        outNat4 maxVSize
-        outNat4 maxWidth
-        outNat2 maxLv
-        outNat2 pageNum
+        outNat4 maxVerticalHeight
+        outNat4 maxHorizonWidth
+        outNat2 maxStackDepth
+        outNat2 totalPagesNum
 
 
     (** -- help func for `postpost` -- **)
