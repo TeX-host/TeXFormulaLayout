@@ -39,7 +39,7 @@ module LoadFont =
         // others dosn't change group id
         | _ -> id
 
-    let getDist (fontSize: FontSize) (param: String) = floatMul (float param) (int32 fontSize)
+    let getDist (fontSize: FontSize) (param: String) = floatMul (float param, int32 fontSize)
 
     let getOct (param: String) = "0o" + param |> int32
 

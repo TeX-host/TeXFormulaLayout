@@ -7,7 +7,7 @@ namespace TeXFormulaLayout
 ///     1<sp> = One: Dist = 2^(-16)<pt>
 module Distance =
     open System
-    type Dist = Int32
+    type Dist = int
 
     /// Power 2
     let pow2 = pown 2
@@ -23,10 +23,14 @@ module Distance =
 
     let half (d: Dist) = d / 2
 
-    let floatMul (f: float) (d: Int32) : Dist = round (f * float d) |> int32
+    /// multiply Dist with real factor
+    let floatMul (f: float, d: Dist) : Dist = round (f * float d) |> int
 
-    let int2Dist (i: Int32) : Dist = i * One
+    /// int to Dist
+    let int2Dist (i: int) : Dist = i * One
 
-    let distDiv num (den: Int32) = (int2Dist num) / den
+    /// fraction to Dist
+    let distDiv (num, den: int) = (int2Dist num) / den
 
-    let real2Dist (r: float) = floatMul r One
+    /// decimal fraction to Dist
+    let real2Dist r = floatMul (r, One)
