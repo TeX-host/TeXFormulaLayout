@@ -7,7 +7,7 @@ module DviState =
     open TeXFormulaLayout.BytesOut
 
     /// Reset Ref to initVal
-    let private resetRef (initVal: int) (r: int ref) = r.Value <- initVal
+    let private resetRef<'T> (initVal: 'T) (r: 'T ref) = r.Value <- initVal
     /// Reset Ref to 0
     let private resetRef0 = resetRef 0
 
@@ -39,7 +39,7 @@ module DviState =
 
     /// List of defined fonts
     let fontList = ref ([]: FontNum list)
-    let resetFontList () = fontList.Value <- ([]: FontNum list)
+    let resetFontList () = resetRef [] fontList
     let defindedFonts () = fontList.Value
     let isFontDefinded f = List.exists ((=) f) fontList.Value
     let addFont f = fontList.Value <- f :: fontList.Value
