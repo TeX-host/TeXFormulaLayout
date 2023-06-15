@@ -30,7 +30,7 @@ module Distance =
     let int2Dist (i: int) : Dist = i * One
 
     /// fraction to Dist
-    let distDiv (num, den: int) = (int2Dist num) / den
+    let frac2Dist (num, den: int) = (int2Dist num) / den
 
     /// decimal fraction to Dist
     let float2Dist r = floatMul (r, One)
