@@ -31,10 +31,12 @@ module DviState =
 
     let resetFont () = actFont := NoFont
 
-    let isSameFont f = !actFont = f
+    /// Is the font f the same as the current font (`actFont`)
+    let isSameFont = (=) actFont.Value
 
     let setFont f = actFont := f
 
+    /// List of defined fonts
     let fontList = ref ([]: FontNum list)
 
     let resetFontList () = fontList := ([]: FontNum list)
