@@ -1,6 +1,8 @@
 #pragma MIME application/x-dvi
 // Tex DVI format
 #include <std/mem.pat>
+#include <std/io.pat>
+
 
 /// [p215#585]
 /// a list of all the commands that may appear in a DVI file.
@@ -130,26 +132,22 @@ struct NumDen {
     Nat4 den;
 } [[inline]]; // NumDen
 
-struct Cmd {
-    DviCmd cmd;
-}; // Cmd
 
-struct Pre: Cmd {
+struct Pre {
     u8 version;
     NumDen num_den;
     Nat4 mag;
-    
+
     Str banner;
 } [[inline]]; // Pre
 
-struct Bop: Cmd {
+struct Bop {
     Nat4 pageNum;
     padding[4*9];
     Nat4 prevPos;
 }; // Bop
-struct Eop: Cmd {};
 
-struct Post: Cmd {
+struct Post {
     Nat4 prevPos;
     NumDen num_den;
     Nat4 mag;
@@ -158,7 +156,8 @@ struct Post: Cmd {
     Nat2 maxStackDepth;
     Nat2 totalPagesNum;
 } [[inline]]; // Post
-struct FontDef: Cmd {
+
+struct FontDef {
 
 }; // FontDef
 
@@ -167,24 +166,62 @@ struct Fil223 {
     u8 fill[while(std::mem::read_unsigned($, 1) == 0xDF)];
 } [[inline]];
 
-struct PostPost: Cmd {
+struct PostPost {
     Nat4 postPos;
     u8 version;
     Fil223 fill;
-} [[inline]]; // PostPost
+}; // PostPost
+
+
+fn not_impl(DviCmd cmd) {
+    // std::error(std::format("Not impl {}", cmd));
+    std::warning(std::format("Not impl {}", cmd));
+};
+
+fn no_args() {};
+
+struct Cmd {
+    /// Cmd type
+    DviCmd cmd;
+
+    /// parse args
+    match (cmd) {
+        // ---- SetChar
+        (DviCmd::SET_CHAR_0 ... DviCmd::SET_CHAR_127): no_args();
+        (DviCmd::SET1): not_impl(cmd);
+        (DviCmd::SET_RULE): not_impl(cmd);
+        // ---- PutChar
+        (DviCmd::PUT1): not_impl(cmd);
+        (DviCmd::PUT_RULE): not_impl(cmd);
+
+        (DviCmd::NOP): no_args();
+        (DviCmd::BOP): Bop bop;
+        (DviCmd::EOP): no_args();
+        // ---- Stack
+        (DviCmd::PUSH): no_args();
+        (DviCmd::POP): no_args();
+
+        (DviCmd::RIGHT1 ... DviCmd::RIGHT4): not_impl(cmd);
+        (DviCmd::DOWN1  ... DviCmd::DOWN4): not_impl(cmd);
+
+        // ---- Font
+        (DviCmd::FNT_NUM_0 ... DviCmd::FNT_NUM_63): no_args();
+        (DviCmd::FNT1): not_impl(cmd);
+        (DviCmd::FNT_DEF_1): not_impl(cmd);
+
+        (DviCmd::PRE): Pre pre  [[inline]];
+        (DviCmd::POST): Post post  [[inline]];
+        (DviCmd::POST_POST): PostPost pp  [[inline]];
+
+        (DviCmd::UNDEFINED): std::warning(std::format("Undefined Cmd {}", cmd));
+        (_) : not_impl(cmd);
+    } // match (cmd)
+}  [[inline]]; // Cmd
 
 
 /// Main DVI file.
 struct DVI {
-    Pre pre;
-    Bop bop;
-    
-    // todo: other Cmd
-    
-    Eop eop;
-    Post post;
-    // FontDef fontDef;
-    PostPost pp;
+    Cmd cmd[while(!std::mem::eof())]  [[inline]];
 }; // DVI
 
 DVI dvi @ 0x00;
