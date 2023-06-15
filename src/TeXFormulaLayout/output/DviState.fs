@@ -12,20 +12,21 @@ module DviState =
     let inc = incRef 1
     let dec = incRef -1
 
-    /// `dvi_h`
+    /// `dvi_h`:  horizontal coordinates, from top left -> right.
     let xMove = ref 0
     let resetX () = xMove := 0
     let getX () = !xMove
     let moveX dx = incRef dx xMove
 
-    /// `dvi_v`
+    /// `dvi_v`: vertical coordinates, from upper left -> down.
     let yMove = ref 0
     let resetY () = yMove := 0
     let getY () = !yMove
     let moveY dy = incRef dy yMove
 
     let NoFont = -1
-    /// `dvi_f`
+    /// `dvi_f`: current font.
+    ///     is changed only by `FNT_1` and `FNT_NUM` commands
     let actFont = ref NoFont
 
     let resetFont () = actFont := NoFont
@@ -44,12 +45,12 @@ module DviState =
 
     let defindedFonts () = !fontList
 
-    /// `total_pages`
+    /// `total_pages` The number of pages that have been shipped out
     let pageNum = ref 0
     let actPage () = !pageNum
     let nextPage () = inc pageNum
 
-    /// `last_bop`
+    /// `last_bop`: location of previous bop in the DVI output
     let oldPos = ref (-1)
     let newPos = ref (-1)
     let prevPos () = !oldPos
@@ -60,8 +61,9 @@ module DviState =
 
         newPos := outPos ()
 
-    /// `curs`
+    /// `cur_s`: current depth of output box nesting, initially -1
     let ActLevel = ref 0
+    /// `max_push`: deepest nesting of push commands encountered so far
     let MaxLevel = ref 0
 
     let incLevel () =
@@ -86,3 +88,6 @@ module DviState =
         ActLevel := 0
 
         MaxLevel := 0
+
+
+    (* TODO: The current spacing amounts are given by four numbers w, x, y, and z *)
