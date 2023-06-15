@@ -6,6 +6,11 @@ module DviState =
     open TeXFormulaLayout.FontTypes
     open TeXFormulaLayout.BytesOut
 
+    /// Reset Ref to initVal
+    let private resetRef (initVal: int) (r: int ref) = r.Value <- initVal
+    /// Reset Ref to 0
+    let private resetRef0 = resetRef 0
+
     /// Increase the reference value by `n`
     let private incRef (n: int) (r: int ref) = r.Value <- r.Value + n
     let private inc = incRef 1
@@ -13,13 +18,13 @@ module DviState =
 
     /// `dvi_h`:  horizontal coordinates, from top left -> right.
     let xMove = ref 0
-    let resetX () = xMove.Value <- 0
+    let resetX () = resetRef0 xMove
     let getX () = xMove.Value
     let moveX dx = incRef dx xMove
 
     /// `dvi_v`: vertical coordinates, from upper left -> down.
     let yMove = ref 0
-    let resetY () = yMove.Value <- 0
+    let resetY () = resetRef0 yMove
     let getY () = yMove.Value
     let moveY dy = incRef dy yMove
 
@@ -27,7 +32,7 @@ module DviState =
     /// `dvi_f`: current font.
     ///     is changed only by `FNT_1` and `FNT_NUM` commands
     let actFont = ref NoFont
-    let resetFont () = actFont.Value <- NoFont
+    let resetFont () = resetRef NoFont actFont
     /// Is the font f the same as the current font (`actFont`)
     let isSameFont = (=) actFont.Value
     let setFont f = actFont.Value <- f
@@ -71,12 +76,11 @@ module DviState =
         resetY ()
         resetFont ()
         resetFontList ()
-
-        pageNum.Value <- 0
-        oldPos.Value <- -1
-        newPos.Value <- -1
-        ActLevel.Value <- 0
-        MaxLevel.Value <- 0
+        resetRef0 pageNum
+        resetRef -1 oldPos
+        resetRef -1 newPos
+        resetRef0 ActLevel
+        resetRef0 MaxLevel
 
 
 (* TODO: The current spacing amounts are given by four numbers w, x, y, and z *)
