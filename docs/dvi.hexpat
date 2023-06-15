@@ -1,5 +1,10 @@
 #pragma MIME application/x-dvi
 // Tex DVI format
+//  + WerWolv/ImHex:  https://github.com/WerWolv/ImHex
+//  + .hexpat Patterns:  https://github.com/WerWolv/ImHex-Patterns
+//  + ref doc:  https://docs.werwolv.net/pattern-language/core-language/data-types
+
+// ---- import libs
 #include <std/mem.pat>
 #include <std/io.pat>
 
