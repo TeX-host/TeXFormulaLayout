@@ -29,9 +29,9 @@ module ExpectoTemplate =
         startOut "empty.dvi"
         let mag = 2000
         Pre mag
-        Bop ()
+        Bop()
         (* empty DVI *)
-        Eop ()
+        Eop()
         Post mag
         endOut ()
 

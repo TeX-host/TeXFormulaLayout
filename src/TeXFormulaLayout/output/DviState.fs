@@ -66,7 +66,8 @@ module DviState =
     let prevPos () = oldPos.Value
     /// Get current output stream pos.
     let actPos () = newPos.Value
-    /// Save current pos as oldPos, Update current output stream pos. 
+
+    /// Save current pos as oldPos, Update current output stream pos.
     let markPos () =
         oldPos.Value <- actPos ()
         newPos.Value <- outPos ()

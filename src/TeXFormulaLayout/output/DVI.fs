@@ -91,6 +91,7 @@ module Dvi =
     let HSkip = right
     /// Skip distance vertically, dist can be negative
     let VSkip = down
+
     /// Draw a a solid black rectangle
     let BlackBox width height depth =
         VSkip depth
