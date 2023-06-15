@@ -119,7 +119,9 @@ enum DviCmd : u8 {
 }; // DviCmd
 
 // u32 with big endian
+using Nat1 = u8;
 using Nat2 = be u16;
+using Nat3 = be u24;
 using Nat4 = be u32;
 
 struct Str {
@@ -133,6 +135,67 @@ struct NumDen {
 } [[inline]]; // NumDen
 
 
+// ==========================
+struct Set1 {
+    char c;
+} [[inline]]; // Set1
+struct SetRule {
+    Nat4 height;
+    Nat4 width;
+}; // SetRule
+
+struct Put1 {
+    char c;
+} [[inline]]; // Put1
+struct PutRule {
+    Nat4 height;
+    Nat4 width;
+}; // PutRule
+
+struct Bop {
+    Nat4 pageNum;
+    /// c1[4] ~ c9[4]
+    Nat4 c[9];
+    Nat4 prevPos;
+}; // Bop
+
+struct Right1 {
+    u8 b;
+}; // Right1
+struct Right2 {
+    Nat2 b;
+}; // Right2
+struct Right3 {
+    Nat3 b;
+}; // Right3
+struct Right4 {
+    Nat4 b;
+}; // Right4
+struct Down1 {
+    u8 b;
+}; // Down1
+struct Down2 {
+    Nat2 b;
+}; // Down2
+struct Down3 {
+    Nat3 b;
+}; // Down3
+struct Down4 {
+    Nat4 b;
+}; // Down4
+
+struct Fnt1 {
+    u8 f;
+}; // Fnt1
+struct FontDef {
+    u8 font_number;
+    Nat4 checksum;
+    Nat4 scale;
+    Nat4 design_size;
+    u8 str_len1;
+    Str fontname;
+}; // FontDef
+
 struct Pre {
     u8 version;
     NumDen num_den;
@@ -140,13 +203,6 @@ struct Pre {
 
     Str banner;
 } [[inline]]; // Pre
-
-struct Bop {
-    Nat4 pageNum;
-    padding[4*9];
-    Nat4 prevPos;
-}; // Bop
-
 struct Post {
     Nat4 prevPos;
     NumDen num_den;
@@ -157,15 +213,9 @@ struct Post {
     Nat2 totalPagesNum;
 } [[inline]]; // Post
 
-struct FontDef {
-
-}; // FontDef
-
-
 struct Fil223 {
     u8 fill[while(std::mem::read_unsigned($, 1) == 0xDF)];
 } [[inline]];
-
 struct PostPost {
     Nat4 postPos;
     u8 version;
@@ -188,11 +238,11 @@ struct Cmd {
     match (cmd) {
         // ---- SetChar
         (DviCmd::SET_CHAR_0 ... DviCmd::SET_CHAR_127): no_args();
-        (DviCmd::SET1): not_impl(cmd);
-        (DviCmd::SET_RULE): not_impl(cmd);
+        (DviCmd::SET1): Set1 set1;
+        (DviCmd::SET_RULE): SetRule setRule;
         // ---- PutChar
-        (DviCmd::PUT1): not_impl(cmd);
-        (DviCmd::PUT_RULE): not_impl(cmd);
+        (DviCmd::PUT1): Put1 put1;
+        (DviCmd::PUT_RULE): PutRule putRule;
 
         (DviCmd::NOP): no_args();
         (DviCmd::BOP): Bop bop;
@@ -201,13 +251,19 @@ struct Cmd {
         (DviCmd::PUSH): no_args();
         (DviCmd::POP): no_args();
 
-        (DviCmd::RIGHT1 ... DviCmd::RIGHT4): not_impl(cmd);
-        (DviCmd::DOWN1  ... DviCmd::DOWN4): not_impl(cmd);
+        (DviCmd::RIGHT1): Right1 right;
+        (DviCmd::RIGHT2): Right2 right;
+        (DviCmd::RIGHT3): Right3 right;
+        (DviCmd::RIGHT4): Right4 right;
+        (DviCmd::DOWN1): Down1 down;
+        (DviCmd::DOWN2): Down2 down;
+        (DviCmd::DOWN3): Down3 down;
+        (DviCmd::DOWN4): Down4 down;
 
         // ---- Font
         (DviCmd::FNT_NUM_0 ... DviCmd::FNT_NUM_63): no_args();
-        (DviCmd::FNT1): not_impl(cmd);
-        (DviCmd::FNT_DEF_1): not_impl(cmd);
+        (DviCmd::FNT1): Fnt1 font;
+        (DviCmd::FNT_DEF_1): FontDef fontDef;
 
         (DviCmd::PRE): Pre pre  [[inline]];
         (DviCmd::POST): Post post  [[inline]];
