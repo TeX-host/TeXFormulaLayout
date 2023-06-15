@@ -6,7 +6,6 @@ namespace TeXFormulaLayout
 ///
 ///     1<sp> = One: Dist = 2^(-16)<pt>
 module Distance =
-    open System
     type Dist = int
 
     /// Power 2
@@ -20,6 +19,7 @@ module Distance =
     /// 2^16
     [<Literal>]
     let One: Dist = 65536
+
 
     let half (d: Dist) = d / 2
 
