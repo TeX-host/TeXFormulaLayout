@@ -22,14 +22,14 @@ module LoadFont =
         fontDir +/ fontName
 
     /// split one line to headChar::tailString
-    let splitLine (line: String) =
+    let private splitLine (line: String) =
         match line.Length with
         | 0 -> ('\u0000', "") /// TODO: maybe throw an error?
         | 1 -> (line.[0], "")
         | _ -> (line.[0], line.Substring(1, line.Length - 1))
 
     /// count group id to split lines into group
-    let countGroupID id line =
+    let private countGroupID id line =
         let typ, param = splitLine line
 
         match typ with
@@ -39,9 +39,9 @@ module LoadFont =
         // others dosn't change group id
         | _ -> id
 
-    let getDist (fontSize: FontSize) (param: String) = floatMul (float param, int fontSize)
+    let private getDist (fontSize: FontSize) (param: String) = floatMul (float param, int fontSize)
 
-    let getOct (param: String) = "0o" + param |> int
+    let private getOct (param: String) = "0o" + param |> int
 
     /// read char info from CharInfoList
     let readCharInfo (fontSize: FontSize) (lineGroup: String list) =
@@ -98,7 +98,7 @@ module LoadFont =
     /// load font info from font files.
     ///
     /// TODO: use parser to read real .tfm fonts
-    let readFontInfo (fontSize: FontSize) (lines: String list) : Font =
+    let private readFontInfo (fontSize: FontSize) (lines: String list) : Font =
         // ---- tag lines
         let tags =
             List.scan countGroupID 0 lines
