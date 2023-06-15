@@ -15,7 +15,8 @@ module FontTypes =
     type FontNum = BaseIntType
     type FontSize = BaseIntType
 
-    /// xref: texbook:p199:S546
+
+    /// [tex#546p199]  `extensible_recipe`
     type VarCharInfo = {
         top: CharCode option
         // mid: CharCode option
@@ -26,18 +27,21 @@ module FontTypes =
     /// xref: neuform:p6:sec3.1, mfbook:p315, texbook:p63
     type CharInfo = {
         // ---- 4D for each character
-        /// the width of the bounding box
+        /// width of the bounding box
         width: Dist
-        /// the height (above the baseline) of the bounding box
+        /// height (above the baseline) of the bounding box
         height: Dist
-        /// the depth (below the baseline) of the bounding box
+        /// depth (below the baseline) of the bounding box
         depth: Dist
-        /// the character’s “italic correction”
+        /// italic correction for character
         italic: Dist
+
+        // tag: uint2
 
         /// larger version of the same char
         larger: CharCode option
-        varChar: VarCharInfo /// NOTE: not used, set to None
+        // NOTE: not used, set to None
+        varChar: VarCharInfo
     }
 
     type Font = CharInfo list
