@@ -86,3 +86,13 @@ module Dvi =
         postpost (actPos ())
         markPos ()
         tailFill (actPage ())
+
+    /// Skip distance horizontally, dist can be negative
+    let HSkip = right
+    /// Skip distance vertically, dist can be negative
+    let VSkip = down
+    /// Draw a a solid black rectangle
+    let BlackBox width height depth =
+        VSkip depth
+        putRule (height + depth, width)
+        VSkip -depth
