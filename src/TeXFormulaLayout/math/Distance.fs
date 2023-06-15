@@ -33,4 +33,4 @@ module Distance =
     let distDiv (num, den: int) = (int2Dist num) / den
 
     /// decimal fraction to Dist
-    let real2Dist r = floatMul (r, One)
+    let float2Dist r = floatMul (r, One)
