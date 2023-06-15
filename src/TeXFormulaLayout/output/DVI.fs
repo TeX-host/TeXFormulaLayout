@@ -85,7 +85,7 @@ module Dvi =
         fontDefs (defindedFonts ())
         postpost (actPos ())
         markPos ()
-        tailFill (actPage ())
+        tailFill (actPos ())
 
     /// Skip distance horizontally, dist can be negative
     let HSkip = right
