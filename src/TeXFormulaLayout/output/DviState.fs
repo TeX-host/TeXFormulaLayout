@@ -92,4 +92,4 @@ module DviState =
         MaxLevel := 0
 
 
-    (* TODO: The current spacing amounts are given by four numbers w, x, y, and z *)
+(* TODO: The current spacing amounts are given by four numbers w, x, y, and z *)

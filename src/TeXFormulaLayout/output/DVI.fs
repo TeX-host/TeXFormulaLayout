@@ -30,10 +30,8 @@ module DVI =
 
     /// Move a step (h, v), and reset it.
     let Move () =
-        getX () |> right
-
-        getY () |> down
-
+        right (getX ())
+        down (getY ())
         resetMove ()
 
     let private DoChar (charFunc: CharCode -> unit) (font, ch) =
