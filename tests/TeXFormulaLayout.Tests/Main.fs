@@ -59,6 +59,7 @@ module ExpectoTemplate =
 
     open LoadFont
     open FontTypes
+
     let writeDviHello () =
         startOut "hello.dvi"
         let mag = 2000
