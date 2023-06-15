@@ -24,7 +24,7 @@ module DVI =
             setFont f
 
     /// Reset (h, v) to Top left (0, 0)
-    let resetMove () =
+    let private resetMove () =
         resetX ()
         resetY ()
 
@@ -36,7 +36,7 @@ module DVI =
 
         resetMove ()
 
-    let DoChar (charFunc: CharCode -> unit) (font, ch) =
+    let private DoChar (charFunc: CharCode -> unit) (font, ch) =
         Font font
         Move()
         charFunc ch
