@@ -276,7 +276,7 @@ module DviOut =
     /// Define font k.
     let fontDef nr =
         /// TODO: global var
-        let famSizeVector = []
+        let famSizeVector = [(FontFamily.RM, 10)]
         let (fam, s) = famSizeVector.[nr]
 
         /// TODO: 添加字体可用性检查
