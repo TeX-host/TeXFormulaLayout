@@ -1,7 +1,7 @@
 namespace TeXFormulaLayout
 
 /// Types for font
-/// (BasicTypes)
+///     [ BasicTypes, Size, FontTypes, ]
 module FontTypes =
     open TeXFormulaLayout.Distance
     open BasicTypes
