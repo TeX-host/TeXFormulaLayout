@@ -66,7 +66,8 @@ module DviState =
 
     let incLevel () =
         inc ActLevel
-        if ActLevel.Value > MaxLevel.Value then inc MaxLevel else ()
+        MaxLevel.Value <- max MaxLevel.Value ActLevel.Value
+    // if ActLevel.Value > MaxLevel.Value then inc MaxLevel else ()
 
     let decLevel () = dec ActLevel
     let maxLevel () = MaxLevel.Value
