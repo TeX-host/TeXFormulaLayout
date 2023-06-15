@@ -14,54 +14,46 @@ module DviState =
 
     /// `dvi_h`:  horizontal coordinates, from top left -> right.
     let xMove = ref 0
-    let resetX () = xMove := 0
-    let getX () = !xMove
+    let resetX () = xMove.Value <- 0
+    let getX () = xMove.Value
     let moveX dx = incRef dx xMove
 
     /// `dvi_v`: vertical coordinates, from upper left -> down.
     let yMove = ref 0
-    let resetY () = yMove := 0
-    let getY () = !yMove
+    let resetY () = yMove.Value <- 0
+    let getY () = yMove.Value
     let moveY dy = incRef dy yMove
 
     let NoFont = -1
     /// `dvi_f`: current font.
     ///     is changed only by `FNT_1` and `FNT_NUM` commands
     let actFont = ref NoFont
-
-    let resetFont () = actFont := NoFont
-
+    let resetFont () = actFont.Value <- NoFont
     /// Is the font f the same as the current font (`actFont`)
     let isSameFont = (=) actFont.Value
-
-    let setFont f = actFont := f
+    let setFont f = actFont.Value <- f
 
     /// List of defined fonts
     let fontList = ref ([]: FontNum list)
-
-    let resetFontList () = fontList := ([]: FontNum list)
-
-    let isFontDefinded f = List.exists ((=) f) !fontList
-
-    let addFont f = fontList := f :: !fontList
-
-    let defindedFonts () = !fontList
+    let resetFontList () = fontList.Value <- ([]: FontNum list)
+    let defindedFonts () = fontList.Value
+    let isFontDefinded f = List.exists ((=) f) fontList.Value
+    let addFont f = fontList.Value <- f :: fontList.Value
 
     /// `total_pages` The number of pages that have been shipped out
     let pageNum = ref 0
-    let actPage () = !pageNum
+    let actPage () = pageNum.Value
     let nextPage () = inc pageNum
 
     /// `last_bop`: location of previous bop in the DVI output
     let oldPos = ref (-1)
     let newPos = ref (-1)
-    let prevPos () = !oldPos
-    let actPos () = !newPos
+    let prevPos () = oldPos.Value
+    let actPos () = newPos.Value
 
     let markPos () =
-        oldPos := actPos ()
-
-        newPos := outPos ()
+        oldPos.Value <- actPos ()
+        newPos.Value <- outPos ()
 
     /// `cur_s`: current depth of output box nesting, initially -1
     let ActLevel = ref 0
@@ -70,10 +62,10 @@ module DviState =
 
     let incLevel () =
         inc ActLevel
-        if !ActLevel > !MaxLevel then inc MaxLevel else ()
+        if ActLevel.Value > MaxLevel.Value then inc MaxLevel else ()
 
     let decLevel () = dec ActLevel
-    let maxLevel () = !MaxLevel
+    let maxLevel () = MaxLevel.Value
 
     let initDviState () =
         resetX ()
@@ -81,15 +73,11 @@ module DviState =
         resetFont ()
         resetFontList ()
 
-        pageNum := 0
-
-        oldPos := -1
-
-        newPos := -1
-
-        ActLevel := 0
-
-        MaxLevel := 0
+        pageNum.Value <- 0
+        oldPos.Value <- -1
+        newPos.Value <- -1
+        ActLevel.Value <- 0
+        MaxLevel.Value <- 0
 
 
 (* TODO: The current spacing amounts are given by four numbers w, x, y, and z *)
