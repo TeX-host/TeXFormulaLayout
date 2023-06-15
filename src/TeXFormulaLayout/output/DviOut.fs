@@ -181,7 +181,7 @@ module DviOut =
     let putChar = dviCmdArg1 DviCmd.PUT1
 
 
-    let private rule cmd (a: Dist) (b: Dist) =
+    let private rule cmd (a: Dist, b: Dist) =
         dviCmd cmd
         outNat4 a
         outNat4 b

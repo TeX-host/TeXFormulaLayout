@@ -36,7 +36,7 @@ module DVI =
 
         resetMove ()
 
-    let DoChar (charFunc: CharCode -> unit) font ch =
+    let DoChar (charFunc: CharCode -> unit) (font, ch) =
         Font font
         Move()
         charFunc ch
