@@ -50,7 +50,7 @@ module FontTypes =
     /// Actually corresponds to font name
     type FontFamily =
         | RM
-        | MI 
+        | MI
         | SY
         | EX
 
@@ -68,11 +68,25 @@ module FontTypes =
         | FontFamily.SY -> "cmsy"
         | FontFamily.EX -> "cmex"
 
+
+    (** layout style:
+     *  Display style: displayed formulae
+     *  | Text style:  inline formulae
+     *  | Script style:  ‘scripts’ (superscripts and subscripts)
+     *  | Script Script style:  scripts of scripts and other subformulae with tiny typesetting
+     *)
     type FontStyle =
-        | D = 0
-        | T = 1
-        | S = 2
-        | SS = 3
+        | D
+        | T
+        | S
+        | SS
+
+    let fontStyleIdx fontStyle =
+        match fontStyle with
+        | FontStyle.D -> 0
+        | FontStyle.T -> 1
+        | FontStyle.S -> 2
+        | FontStyle.SS -> 3
 
     let fontSize (famliy, style) : FontSize =
         match (famliy, style) with
@@ -81,7 +95,6 @@ module FontTypes =
         | (FontFamily.EX, _) -> 10
         | (_, FontStyle.S) -> 7
         | (_, FontStyle.SS) -> 5
-        | _ -> -1
 
     exception NotImplemented of string
     exception CannotHappen
