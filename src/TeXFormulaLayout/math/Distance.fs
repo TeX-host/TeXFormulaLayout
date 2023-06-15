@@ -6,7 +6,7 @@ namespace TeXFormulaLayout
 ///
 ///     1<sp> = One: Dist = 2^(-16)<pt>
 module Distance =
-    type Dist = int
+    type Dist = BasicTypes.BaseIntType
 
     /// Power 2
     let pow2 = pown 2

@@ -9,7 +9,7 @@ module EquInput =
     let SumSym = MathChar(Op, FontFamily.EX, 80)
     let IntSym = MathChar(Op, FontFamily.EX, 82)
 
-    let ord (c: char) = System.Convert.ToInt32(c)
+    let ord (c: char) = int c
 
     let sym ch =
         if System.Char.IsLetter ch then

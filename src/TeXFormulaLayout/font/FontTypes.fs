@@ -3,15 +3,17 @@ namespace TeXFormulaLayout
 /// Types for font
 /// (BasicTypes)
 module FontTypes =
-    open System
     open TeXFormulaLayout.Distance
+    open BasicTypes
 
-    type CharCode = Int32
-    type Delim = Int32
-    type Penalty = Int32
-    type Size = Int32
-    type FontNum = Int32
-    type FontSize = Int32
+    type CharCode = BaseIntType
+    type Delim = BaseIntType
+    type Penalty = BaseIntType
+    (* Skip: Distance.Dist *)
+    type Size = BaseIntType
+
+    type FontNum = BaseIntType
+    type FontSize = BaseIntType
 
     /// xref: texbook:p199:S546
     type VarCharInfo = {

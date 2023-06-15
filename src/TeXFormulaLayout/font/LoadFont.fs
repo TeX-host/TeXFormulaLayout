@@ -39,9 +39,9 @@ module LoadFont =
         // others dosn't change group id
         | _ -> id
 
-    let getDist (fontSize: FontSize) (param: String) = floatMul (float param, int32 fontSize)
+    let getDist (fontSize: FontSize) (param: String) = floatMul (float param, int fontSize)
 
-    let getOct (param: String) = "0o" + param |> int32
+    let getOct (param: String) = "0o" + param |> int
 
     /// read char info from CharInfoList
     let readCharInfo (fontSize: FontSize) (lineGroup: String list) =

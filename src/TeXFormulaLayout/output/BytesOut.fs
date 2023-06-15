@@ -47,4 +47,4 @@ module BytesOut =
     let outPos () =
         let bw = getStream ()
 
-        bw.BaseStream.Position |> int32
+        bw.BaseStream.Position |> int
