@@ -35,9 +35,19 @@ module ExpectoTemplate =
         Post mag
         endOut ()
 
+    let writeDviBox () =
+        startOut "box.dvi"
+        let mag = 2000
+        Pre mag
+        Bop()
+        BlackBox 1000_000 200_000 0
+        Eop()
+        Post mag
+        endOut ()
 
     [<EntryPoint>]
     let main argv =
         // Tests.runTestsInAssemblyWithCLIArgs [] argv
         writeEmptyDvi ()
+        writeDviBox ()
         0
