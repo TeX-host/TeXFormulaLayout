@@ -31,7 +31,7 @@
         <Compile Include="font\LoadFont.fs" />
         <Compile Include="output\DviOut.fs" />
         <Compile Include="output\DviState.fs" />
-        <Compile Include="output\DVI.fs" />
+        <Compile Include="output\Dvi.fs" />
 
         <!-- Main -->
         <Compile Include="AssemblyInfo.fs" />
