@@ -282,7 +282,7 @@ module DviOut =
         /// TODO: 添加字体可用性检查
         let size = int2Dist s
 
-        let fileName = cmName fam + string s
+        let fileName = fontFamilyName fam + string s
 
         dviCmd DviCmd.FNT_DEF_1
         // k[1]: font number

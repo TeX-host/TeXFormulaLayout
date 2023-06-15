@@ -61,8 +61,8 @@ module FontTypes =
         | FontFamily.SY -> 2
         | FontFamily.EX -> 3
 
-    let cmName (cm: FontFamily) =
-        match cm with
+    let fontFamilyName fontType =
+        match fontType with
         | FontFamily.RM -> "cmr"
         | FontFamily.MI -> "cmmi"
         | FontFamily.SY -> "cmsy"
