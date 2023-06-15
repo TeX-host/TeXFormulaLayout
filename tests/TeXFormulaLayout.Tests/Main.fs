@@ -21,7 +21,23 @@ module SayTests =
 
 
 module ExpectoTemplate =
+    open TeXFormulaLayout
+    open BytesOut
+    open Dvi
+
+    let writeEmptyDvi () =
+        startOut "empty.dvi"
+        let mag = 2000
+        Pre mag
+        Bop ()
+        (* empty DVI *)
+        Eop ()
+        Post mag
+        endOut ()
+
 
     [<EntryPoint>]
     let main argv =
-        Tests.runTestsInAssemblyWithCLIArgs [] argv
+        // Tests.runTestsInAssemblyWithCLIArgs [] argv
+        writeEmptyDvi ()
+        0
