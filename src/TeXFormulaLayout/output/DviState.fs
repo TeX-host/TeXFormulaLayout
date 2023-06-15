@@ -19,12 +19,14 @@ module DviState =
     /// `dvi_h`:  horizontal coordinates, from top left -> right.
     let xMove = ref 0
     let resetX () = resetRef0 xMove
+    /// Get current horizontal coordinates `h`
     let getX () = xMove.Value
     let moveX dx = incRef dx xMove
 
     /// `dvi_v`: vertical coordinates, from upper left -> down.
     let yMove = ref 0
     let resetY () = resetRef0 yMove
+    /// Get current vertical coordinates `v`
     let getY () = yMove.Value
     let moveY dy = incRef dy yMove
 
@@ -32,29 +34,39 @@ module DviState =
     /// `dvi_f`: current font.
     ///     is changed only by `FNT_1` and `FNT_NUM` commands
     let actFont = ref NoFont
+    /// Reset actFont to NoFont
     let resetFont () = resetRef NoFont actFont
-    /// Is the font f the same as the current font (`actFont`)
+    /// Is the font `f` the same as the current font (`actFont`)
     let isSameFont = (=) actFont.Value
+    /// Set font `f` as actFont.
     let setFont f = actFont.Value <- f
 
     /// List of defined fonts
     let fontList = ref ([]: FontNum list)
+    /// Reset fontList to empty []
     let resetFontList () = resetRef [] fontList
+    /// Get current fontList
     let defindedFonts () = fontList.Value
+    /// Is the font `f` exist in fontList?
     let isFontDefinded f = List.exists ((=) f) fontList.Value
+    /// Add font `f` to fontList.
     let addFont f = fontList.Value <- f :: fontList.Value
 
     /// `total_pages` The number of pages that have been shipped out
     let pageNum = ref 0
+    /// Get current pageNum
     let actPage () = pageNum.Value
+    /// Inc pageNum, goto next page.
     let nextPage () = inc pageNum
 
     /// `last_bop`: location of previous bop in the DVI output
     let oldPos = ref (-1)
     let newPos = ref (-1)
+    /// Get old output stream pos.
     let prevPos () = oldPos.Value
+    /// Get current output stream pos.
     let actPos () = newPos.Value
-
+    /// Save current pos as oldPos, Update current output stream pos. 
     let markPos () =
         oldPos.Value <- actPos ()
         newPos.Value <- outPos ()
@@ -72,6 +84,7 @@ module DviState =
     let decLevel () = dec ActLevel
     let maxLevel () = MaxLevel.Value
 
+    /// Reset all DviStates
     let initDviState () =
         resetX ()
         resetY ()
