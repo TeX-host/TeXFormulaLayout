@@ -170,3 +170,19 @@ module LoadFont =
     let loadFont (famliyName: FontFamily, fontSize) : Font =
         getFontPath fontDirPath (string famliyName) fontSize
         |> (readFontLines fontSize)
+
+
+module FontList =
+    open FontTypes
+
+    let fontFamilyList = [ FontFamily.RM; FontFamily.MI; FontFamily.SY; FontFamily.EX ]
+    let fontStyleList = [ FontStyle.D; FontStyle.T; FontStyle.S; FontStyle.SS ]
+
+    // [ (RM, D); ... ]
+    let fontList = [
+        for fam in fontFamilyList do
+            for sty in fontStyleList do
+                yield (fam, sty)
+    ]
+    // [ (RM, 10); ... ]
+    let fontFamSizeList = List.map (fun (fam, sty) -> (fam, fontStyleIdx sty)) fontList
